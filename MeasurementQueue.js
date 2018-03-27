@@ -1,6 +1,10 @@
 const {metersToMiles, millisecondsToHours} = require('./utils');
 
-module.exports = class MeasurementQueue {
+module.exports = class MeasurementQueue extends Array {
+
+  constructor(items) {
+    super(items);
+  }
 
   measure = (item) => {
     super.push(item);
