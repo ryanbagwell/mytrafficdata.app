@@ -1,6 +1,7 @@
 const fs = require('fs');
 const SerialPort = require('serialport');
 
+
 export function metersToFeet(meters) {
   return (meters * 3.28084).toFixed(10);
 }
