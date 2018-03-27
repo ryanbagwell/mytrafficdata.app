@@ -1,12 +1,30 @@
+#!/usr/bin/env node
 require("babel-core/register");
+const SerialPort = require('serialport');
 let {metersToMiles, millisecondsToHours} = require('./utils');
 const moment = require('moment');
 const babar = require('babar');
 
 
-const SerialPort = require('serialport');
-const port = new SerialPort('/dev/tty.SLAB_USBtoUART', {
-  baudRate: 115200
+const port = new SerialPort(null, {
+  baudRate: 115200,
+  autoOpen: false,
+});
+
+SerialPort.list().then((ports) => {
+
+  let usbport = ports.find((port) => {
+    return /Silicon Labs/.test(manufacturer);
+  });
+
+  if (usbport) {
+    console.log('Opening serial port');
+    port.open(usbport.comName);
+  } else {
+    console.error("Couldn't find Silicon Labs USB serial port");
+    process.exit();
+  }
+
 });
 
 const startBytes = new Buffer([0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06]);
@@ -15,6 +33,9 @@ let history = [];
 
 const queue = [];
 
+port.on('open', (data) => {
+  console.log('port opened')
+});
 
 port.on('data', (data) => {
 
@@ -59,10 +80,10 @@ port.on('data', (data) => {
         height: 30,
       })
 
-      process.stdout.cursorTo(0, 0);
-      process.stdout.clearScreenDown();
-      process.stdout.write('\n');
-      process.stdout.write(chart);
+      // process.stdout.cursorTo(0, 0);
+      // process.stdout.clearScreenDown();
+      // process.stdout.write('\n');
+      // process.stdout.write(chart);
 
     }
 
@@ -71,5 +92,7 @@ port.on('data', (data) => {
 });
 
 port.write(startBytes, (err) => {
-  console.log(err);
+  console.log('Writing start bytes ...');
+  if (err) console.log(err);
 });
+

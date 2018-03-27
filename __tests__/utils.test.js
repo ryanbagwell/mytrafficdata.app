@@ -1,4 +1,9 @@
-const {metersToFeet, feetToMiles, metersToMiles, millisecondsToHours} = require('../utils');
+const {metersToFeet,
+       feetToMiles,
+       metersToMiles,
+       millisecondsToHours,
+       findUSBSerialPort
+} = require('../utils');
 
 
 test('Can correctly convert meters to feet', () => {
