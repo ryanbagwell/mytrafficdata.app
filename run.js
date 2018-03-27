@@ -12,7 +12,7 @@ const queue = new MeasurementQueue();
 const startBytes = new Buffer([0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06]);
 
 
-function report(mph) {
+function reportGraph(mph) {
 
   if (history[history.length - 1] !== mph && mph > 0) {
 
@@ -36,6 +36,14 @@ function report(mph) {
 
   }
 
+}
+
+function reportCli(mph, distance, strength) {
+    process.stdout.cursorTo(0, 0);
+    process.stdout.clearScreenDown();
+    process.stdout.write(`Speed: ${mph} mph\n`);
+    process.stdout.write(`Distance: ${distance} miles\n`);
+    process.stdout.write(`Strength: ${strength}\n`);
 }
 
 
@@ -65,13 +73,13 @@ SerialPort.list().then((ports) => {
 
     const strength = data[4] + (data[5] << 8);
 
-    const speed = queue.measure({
+    const {mph, distance, signalStrength} = queue.measure({
       distance: dist,
       time: moment().format('x'),
       strength: strength,
     });
 
-    report(speed);
+    reportCli(mph, distance, signalStrength);
 
   });
 

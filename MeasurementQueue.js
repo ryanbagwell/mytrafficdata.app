@@ -1,6 +1,6 @@
 const {metersToMiles, millisecondsToHours} = require('./utils');
 
-module.exports = class MeasurementQueue extends Array {
+module.exports = class MeasurementQueue {
 
   constructor(items) {
     super(items);
@@ -25,7 +25,11 @@ module.exports = class MeasurementQueue extends Array {
 
       this.shift();
 
-      return mph;
+      return {
+        mph,
+        distance: miles,
+        signalStrength: strength2,
+      }
 
     }
 
