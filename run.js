@@ -1,40 +1,66 @@
 #!/usr/bin/env node
-require("babel-core/register");
 const SerialPort = require('serialport');
 const {metersToMiles, millisecondsToHours} = require('./utils');
 const moment = require('moment');
-const babar = require('babar');
-const MeasurementQueue = require('./MeasurementQueue');
+const commands = require('./commands');
+const logger = require('./logger');
+const asciichart = require('asciichart');
+const Readline = require('@serialport/parser-readline');
+const getSerialPort = require('./getSerialPort');
 
 
-let history = [];
-const queue = new MeasurementQueue();
-const startBytes = new Buffer([0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06]);
+let lastInboundSpeed = null,
+  lastOutboundSpeed = null;
 
+function reportOutboundSpeed({speed, magnitude}) {
+
+}
+
+
+function reportInboundSpeed({speed, magnitude}) {
+
+  if (lastInboundSpeed && lastInboundSpeed.magnitude < magnitude) {
+    //
+  }
+
+}
+
+
+function reportSpeed({speed, magnitude}) {
+
+    if (speed > 0) {
+      // Inbound
+      reportInboundSpeed({speed, magnitude});
+
+
+
+    } else {
+      //outbound
+      reportOutboundSpeed({speed, magnitude});
+
+
+    }
+
+
+}
+
+
+
+// let history = [];
+// const queue = new MeasurementQueue();
+// const startBytes = new Buffer([0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06]);
+
+let speeds =[0];
 
 function reportGraph(mph) {
 
-  if (history[history.length - 1] !== mph && mph > 0) {
-
-    history.push(mph > 0 ? mph : mph * -1);
-
-    history = history.slice(Math.max(history.length - 20, 0));
-
-    let chart = babar(history.map((speed, i) => {
-      return [i, speed];
-    }), {
-      minY: 0,
-      maxY: 50,
-      width: 120,
-      height: 30,
-    })
-
-    process.stdout.cursorTo(0, 0);
-    process.stdout.clearScreenDown();
-    process.stdout.write('\n');
-    process.stdout.write(chart);
-
-  }
+  speeds.push(mph);
+  const start = Math.max(speeds.length - 50, 0);
+  process.stdout.cursorTo(0, 0);
+  process.stdout.clearScreenDown();
+  process.stdout.write(
+    asciichart.plot(speeds.slice(start), {height: 10})
+  );
 
 }
 
@@ -46,46 +72,43 @@ function reportCli(mph, distance, strength) {
     process.stdout.write(`Strength: ${strength}\n`);
 }
 
+const sendCommand = (portInstance, {cmd, actionDescription}) => {
 
+  if (actionDescription) {
+    logger.info(actionDescription);
+  }
 
-SerialPort.list().then((ports) => {
+  portInstance.write(cmd, (err) => {
 
-    let usbport = ports.find((port) => {
-      return /Silicon Labs/.test(port.manufacturer);
-    });
-
-    if (usbport) {
-      console.log('Opening serial port');
-      return usbport.comName;
-    } else {
-      console.error("Couldn't find Silicon Labs USB serial port");
-      process.exit();
-    }
-
-}).then((path) => {
-  const port = new SerialPort(path, {
-    baudRate: 115200,
-  });
-
-  port.on('data', (data) => {
-
-    const dist = (data[2] + (data[3] << 8)) / 100;
-
-    const strength = data[4] + (data[5] << 8);
-
-    const {mph, distance, signalStrength} = queue.measure({
-      distance: dist,
-      time: moment().format('x'),
-      strength: strength,
-    });
-
-    reportCli(mph, distance, signalStrength);
-
-  });
-
-  port.write(startBytes, (err) => {
-    console.log('Writing start bytes ...');
     if (err) console.log(err);
   });
+
+}
+
+
+
+
+
+getSerialPort.then(({port, parser}) => {
+
+  logger.info('Listening for data ...');
+
+  parser.on('data', (buffer) => {
+
+    let data;
+
+    try {
+      data = JSON.parse(buffer.toString());
+      console.log(data);
+    } catch (err) {
+      return;
+    }
+
+    //data && data.speed && reportGraph(data.speed);
+
+  });
+
+
+
 
 });

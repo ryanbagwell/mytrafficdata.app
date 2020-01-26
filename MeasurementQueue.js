@@ -26,9 +26,13 @@ module.exports = class MeasurementQueue extends Array {
       this.shift();
 
       return {
-        mph,
-        distance: miles,
-        signalStrength: strength2,
+        speed: mph,
+        distance1,
+        time1,
+        strength1,
+        distance2,
+        time2,
+        strength2,
       }
 
     }
