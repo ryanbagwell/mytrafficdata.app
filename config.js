@@ -2,9 +2,10 @@
 const logger = require('./logger');
 const getSerialPort = require('./getSerialPort');
 const commands = require('./commands');
+const fs = require('fs')
 
 
-const conf = {
+const defaultConf = {
   json: true, //json reporting
   idle: false, //idle power mode
   magnitude: true, //magnitude reporting,
@@ -17,7 +18,7 @@ const conf = {
   bufferSize: 1024,
   sampleSize: 20000,
   save: true,
-}
+};
 
 
 const confFunctions = {
@@ -86,27 +87,47 @@ const confFunctions = {
   }
 }
 
-getSerialPort.then(({port, parser}) => {
 
-  parser.on('data', (buffer) => {
-    logger.debug(buffer.toString())
-  });
+fs.readFile('./config.json', (err, data) => {
 
-  Object.entries(conf).map(([name, value], i) => {
+  let conf = {
+    ...defaultConf,
+  };
 
-    const func = confFunctions[name];
-
+  if (data) {
     try {
-      func(value, port);
-      logger.info(`Set value ${value} for ${name}`);
-    } catch(err) {
+      conf = {
+        ...conf,
+        ...JSON.parse(data.toString()),
+      }
+    } catch (err) {
       logger.error(err);
-    }
+    };
+  }
+
+  getSerialPort.then(({port, parser}) => {
+
+    parser.on('data', (buffer) => {
+      logger.debug(buffer.toString())
+    });
+
+    Object.entries(confFunctions).map(([name, func], i) => {
+
+      const value = conf[name];
+
+      try {
+        func(value, port);
+        logger.info(`Set value ${value} for ${name}`);
+      } catch(err) {
+        logger.error(err);
+      }
+
+    });
+
+    setTimeout(() => {
+      process.exit();
+    }, 2000);
 
   });
-
-  setTimeout(() => {
-    process.exit();
-  }, 2000);
 
 });
