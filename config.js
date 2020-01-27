@@ -17,6 +17,7 @@ const defaultConf = {
   minimumSpeed: 10,
   bufferSize: 1024,
   sampleSize: 20000,
+  numReports: 1,
   save: true,
 };
 
@@ -81,6 +82,9 @@ const confFunctions = {
       50000: 'SL',
     }
     port.write(sizes[value])
+  },
+  numReports: (value = 1, port) => {
+    port.write(`O${value}`);
   },
   save: (value = true, port) => {
     value && port.write('A!');
