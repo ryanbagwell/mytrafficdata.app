@@ -17,8 +17,12 @@ const defaultConf = {
   minimumSpeed: 10,
   bufferSize: 1024,
   sampleSize: 20000,
-  numReports: 1,
+  numReports: 9,
   save: true,
+  hibernate: false,
+  hibernateTime: 1,
+  hibernateDelay: 0.5,
+  direction: 'both',
 };
 
 
@@ -83,8 +87,35 @@ const confFunctions = {
     }
     port.write(sizes[value])
   },
-  numReports: (value = 1, port) => {
+  numReports: (value = 9, port) => {
     port.write(`O${value}`);
+  },
+  hibernate: (value = false, port) => {
+    const cmd = value === true ? 'Z+' : 'Z-';
+    port.write(cmd);
+  },
+  hibernateTime: (value = 1, port) => {
+    port.write(`Z=${value}`);
+  },
+  hibernateDelay: (value = 0.5, port) => {
+    port.write(`Z>${value}`);
+  },
+  direction: (value = 'both', port) => {
+    let cmd;
+
+    switch (value) {
+      case 'both':
+        cmd = 'R|';
+        break;
+      case 'inbound':
+        cmd = 'R+';
+        break;
+      case 'outbound':
+        cmd = 'R-';
+      default:
+        cmd = 'R|';
+    }
+    port.write(cmd);
   },
   save: (value = true, port) => {
     value && port.write('A!');
