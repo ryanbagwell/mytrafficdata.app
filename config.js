@@ -112,6 +112,7 @@ const confFunctions = {
         break;
       case 'outbound':
         cmd = 'R-';
+        break;
       default:
         cmd = 'R|';
     }
