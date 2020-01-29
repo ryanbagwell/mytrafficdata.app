@@ -44,11 +44,8 @@ function reportSpeed({speed, magnitude}) {
 
 }
 
+const queue = new MeasurementQueue();
 
-
-// let history = [];
-// const queue = new MeasurementQueue();
-// const startBytes = new Buffer([0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06]);
 
 let speeds =[0];
 
@@ -98,11 +95,12 @@ getSerialPort.then(({port, parser}) => {
     try {
       data = JSON.parse(buffer.toString());
       console.log(data);
+
     } catch (err) {
       return;
     }
 
-    //data && data.speed && reportGraph(data.speed);
+    data && data.speed && queue.push(data);
 
   });
 

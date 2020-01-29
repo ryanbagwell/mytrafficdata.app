@@ -1,43 +1,27 @@
-const {metersToMiles, millisecondsToHours} = require('./utils');
+const logger = require('./logger');
 
 module.exports = class MeasurementQueue extends Array {
+
+  rawData = [];
 
   constructor(items) {
     super(items);
   }
 
-  measure = (item) => {
-    super.push(item);
+  push = ({magnitude, speed}) => {
 
-    if (this.length === 3) {
-      const {distance: distance1, time: time1, strength: strength1} = this[1];
-      const {distance: distance2, time: time2, strength: strength2} = this[2];
+    const last = arr.slice(-1)[0] ;
 
-      const meters = distance1 - distance2;
-
-      const timeDiff = time2 - time1;
-
-      const miles = metersToMiles(meters);
-
-      const hours = millisecondsToHours(timeDiff);
-
-      const mph = (miles / hours).toFixed(2);
-
-      this.shift();
-
-      return {
-        speed: mph,
-        distance1,
-        time1,
-        strength1,
-        distance2,
-        time2,
-        strength2,
-      }
-
+    if (magnitude < 30 && last - magnitude >= 20) {
+      const speeds = rawData.map(x => x.speed);
+      super.push({
+        time: '',
+        speed: Math.max(speeds),
+      });
+      rawData = [];
+      logger.info(`Counted 1. Total: ${this.length}`);
     }
-
-    return 0;
+    rawData.push({magnitude, speed});
 
   }
 
