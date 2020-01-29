@@ -162,10 +162,9 @@ fs.readFile('./config.json', (err, data) => {
 
     });
 
-    setTimeout(() => {
-      port.close();
+    port.drain(() => {
       process.exit();
-    }, 2000);
+    })
 
   });
 
