@@ -29,19 +29,19 @@ const defaultConf = {
 const confFunctions = {
   json: (value = true, port) => {
     const cmd = value ? 'OJ' : 'Oj';
-    port.write(cmd);
+    return port.write(cmd);
   },
   idle: (value = true, port) => {
     const cmd = value ? 'PI' : 'PA';
-    port.write(cmd);
+    return port.write(cmd);
   },
   magnitude: (value = true, port) => {
     const cmd = value ? 'OM' : 'Om';
-    port.write(cmd);
+    return port.write(cmd);
   },
   timeReports: (value = false, port) => {
     const cmd = value ? 'OT' : 'Ot';
-    port.write(cmd);
+    return port.write(cmd);
   },
   units: (value = 'mph', port) => {
     let units = {
@@ -50,25 +50,25 @@ const confFunctions = {
       kph: 'UK',
       fps: 'UF',
     }
-    port.write(units[value]);
+    return port.write(units[value]);
 
   },
   blankReporting: (value = false, port) => {
     const cmd = value ? 'BV' : 'BL';
-    port.write(cmd);
+    return port.write(cmd);
   },
   ledControl: (value = false, port) => {
     const cmd = value ? 'OL' : 'Ol';
-    port.write(cmd);
+    return port.write(cmd);
   },
   powerLevel: (value = 0, port) => {
     if (value > 7) {
       return logger.error('Power level value must not exceed 7');
     };
-    port.write(`P${value}`);
+    return port.write(`P${value}`);
   },
   minimumSpeed: (value = 5, port) => {
-    port.write(`R>${value}\r`);
+    return port.write(`R>${value}\r`);
   },
   bufferSize: (value = 1024, port) => {
     const sizes = {
@@ -77,7 +77,7 @@ const confFunctions = {
       256: 'S[',
     };
 
-    port.write(sizes[value]);
+    return port.write(sizes[value]);
   },
   sampleSize: (value = 20000, port) => {
     let sizes = {
@@ -85,20 +85,20 @@ const confFunctions = {
       20000: 'S2',
       50000: 'SL',
     }
-    port.write(sizes[value])
+    return port.write(sizes[value]);
   },
   numReports: (value = 9, port) => {
-    port.write(`O${value}`);
+    return port.write(`O${value}`);
   },
   hibernate: (value = false, port) => {
     const cmd = value === true ? 'Z+' : 'Z-';
-    port.write(cmd);
+    return port.write(cmd);
   },
   hibernateTime: (value = 1, port) => {
-    port.write(`Z=${value}`);
+    return port.write(`Z=${value}`);
   },
   hibernateDelay: (value = 0.5, port) => {
-    port.write(`Z>${value}`);
+    return port.write(`Z>${value}`);
   },
   direction: (value = 'both', port) => {
     let cmd;
@@ -116,10 +116,10 @@ const confFunctions = {
       default:
         cmd = 'R|';
     }
-    port.write(cmd);
+    return port.write(cmd);
   },
   save: (value = true, port) => {
-    value && port.write('A!');
+    return value && port.write('A!');
   }
 }
 
@@ -144,6 +144,7 @@ fs.readFile('./config.json', (err, data) => {
   getSerialPort.then(({port, parser}) => {
 
     parser.on('data', (buffer) => {
+
       logger.info(buffer.toString())
     });
 
@@ -153,7 +154,8 @@ fs.readFile('./config.json', (err, data) => {
 
       try {
         setTimeout(() => {
-          func(value, port);
+          const result = func(value, port);
+          console.log(result);
           port.drain(() => {
             logger.info(`Set value ${value} for ${name}`);
           });
