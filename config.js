@@ -27,69 +27,69 @@ const defaultConf = {
 
 
 const confFunctions = {
-  json: (value = true, port) => {
-    const cmd = value ? 'OJ' : 'Oj';
-    return port.write(cmd);
-  },
-  idle: (value = true, port) => {
-    const cmd = value ? 'PI' : 'PA';
-    return port.write(cmd);
-  },
-  magnitude: (value = true, port) => {
-    const cmd = value ? 'OM' : 'Om';
-    return port.write(cmd);
-  },
-  timeReports: (value = false, port) => {
-    const cmd = value ? 'OT' : 'Ot';
-    return port.write(cmd);
-  },
-  units: (value = 'mph', port) => {
-    let units = {
-      mph: 'US',
-      mps: 'UM',
-      kph: 'UK',
-      fps: 'UF',
-    }
-    return port.write(units[value]);
+  // json: (value = true, port) => {
+  //   const cmd = value ? 'OJ' : 'Oj';
+  //   return port.write(cmd);
+  // },
+  // idle: (value = true, port) => {
+  //   const cmd = value ? 'PI' : 'PA';
+  //   return port.write(cmd);
+  // },
+  // magnitude: (value = true, port) => {
+  //   const cmd = value ? 'OM' : 'Om';
+  //   return port.write(cmd);
+  // },
+  // timeReports: (value = false, port) => {
+  //   const cmd = value ? 'OT' : 'Ot';
+  //   return port.write(cmd);
+  // },
+  // units: (value = 'mph', port) => {
+  //   let units = {
+  //     mph: 'US',
+  //     mps: 'UM',
+  //     kph: 'UK',
+  //     fps: 'UF',
+  //   }
+  //   return port.write(units[value]);
 
-  },
-  blankReporting: (value = false, port) => {
-    const cmd = value ? 'BV' : 'BL';
-    return port.write(cmd);
-  },
-  ledControl: (value = false, port) => {
-    const cmd = value ? 'OL' : 'Ol';
-    return port.write(cmd);
-  },
-  powerLevel: (value = 0, port) => {
-    if (value > 7) {
-      return logger.error('Power level value must not exceed 7');
-    };
-    return port.write(`P${value}`);
-  },
-  minimumSpeed: (value = 5, port) => {
-    return port.write(`R>${value}\r`);
-  },
-  bufferSize: (value = 1024, port) => {
-    const sizes = {
-      1024: 'S>',
-      512: 'S<',
-      256: 'S[',
-    };
+  // },
+  // blankReporting: (value = false, port) => {
+  //   const cmd = value ? 'BV' : 'BL';
+  //   return port.write(cmd);
+  // },
+  // ledControl: (value = false, port) => {
+  //   const cmd = value ? 'OL' : 'Ol';
+  //   return port.write(cmd);
+  // },
+  // powerLevel: (value = 0, port) => {
+  //   if (value > 7) {
+  //     return logger.error('Power level value must not exceed 7');
+  //   };
+  //   return port.write(`P${value}`);
+  // },
+  // minimumSpeed: (value = 5, port) => {
+  //   return port.write(`R>${value}\r`);
+  // },
+  // bufferSize: (value = 1024, port) => {
+  //   const sizes = {
+  //     1024: 'S>',
+  //     512: 'S<',
+  //     256: 'S[',
+  //   };
 
-    return port.write(sizes[value]);
-  },
-  sampleSize: (value = 20000, port) => {
-    let sizes = {
-      10000: 'S1',
-      20000: 'S2',
-      50000: 'SL',
-    }
-    return port.write(sizes[value]);
-  },
-  numReports: (value = 9, port) => {
-    return port.write(`O${value}`);
-  },
+  //   return port.write(sizes[value]);
+  // },
+  // sampleSize: (value = 20000, port) => {
+  //   let sizes = {
+  //     10000: 'S1',
+  //     20000: 'S2',
+  //     50000: 'SL',
+  //   }
+  //   return port.write(sizes[value]);
+  // },
+  // numReports: (value = 9, port) => {
+  //   return port.write(`O${value}`);
+  // },
   hibernate: (value = false, port) => {
     const cmd = value === true ? 'Z+' : 'Z-';
     return port.write(cmd);
