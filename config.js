@@ -164,7 +164,10 @@ fs.readFile('./config.json', (err, data) => {
 
     });
 
-    setTimeout(() => process.exit(), 20000;
+    setTimeout(() => {
+      port.close();
+      process.exit();
+    }, 25000);
 
   });
 
