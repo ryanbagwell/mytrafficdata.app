@@ -2,7 +2,7 @@
 const logger = require('./logger');
 const getSerialPort = require('./getSerialPort');
 const commands = require('./commands');
-const fs = require('fs')
+const fs = require('fs');
 
 
 const defaultConf = {
@@ -154,7 +154,9 @@ fs.readFile('./config.json', (err, data) => {
       try {
         setTimeout(() => {
           func(value, port);
-          logger.info(`Set value ${value} for ${name}`);
+          port.drain(() => {
+            logger.info(`Set value ${value} for ${name}`);
+          });
         }, 1000 * i);
       } catch(err) {
         logger.error(err);
@@ -162,9 +164,7 @@ fs.readFile('./config.json', (err, data) => {
 
     });
 
-    port.drain(() => {
-      process.exit();
-    })
+    setTimeout(() => process.exit(), 20000;
 
   });
 
