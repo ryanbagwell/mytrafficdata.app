@@ -144,7 +144,7 @@ fs.readFile('./config.json', (err, data) => {
   getSerialPort.then(({port, parser}) => {
 
     parser.on('data', (buffer) => {
-      logger.debug(buffer.toString())
+      logger.info(buffer.toString())
     });
 
     Object.entries(confFunctions).map(([name, func], i) => {
@@ -152,8 +152,10 @@ fs.readFile('./config.json', (err, data) => {
       const value = conf[name];
 
       try {
-        func(value, port);
-        logger.info(`Set value ${value} for ${name}`);
+        setTimeout(() => {
+          func(value, port);
+          logger.info(`Set value ${value} for ${name}`);
+        }, 1000 * i);
       } catch(err) {
         logger.error(err);
       }
@@ -161,6 +163,7 @@ fs.readFile('./config.json', (err, data) => {
     });
 
     setTimeout(() => {
+      port.close();
       process.exit();
     }, 2000);
 
