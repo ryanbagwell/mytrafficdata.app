@@ -2,10 +2,9 @@ const logger = require('./logger');
 
 module.exports = class MeasurementQueue extends Array {
 
-  rawData = [];
-
   constructor(items) {
     super(items);
+    this.rawData = [];
   }
 
   push = ({magnitude, speed}) => {

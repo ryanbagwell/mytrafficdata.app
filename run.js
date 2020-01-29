@@ -7,6 +7,7 @@ const logger = require('./logger');
 const asciichart = require('asciichart');
 const Readline = require('@serialport/parser-readline');
 const getSerialPort = require('./getSerialPort');
+const MeasurementQueue = require('./MeasurementQueue');
 
 
 let lastInboundSpeed = null,
