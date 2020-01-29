@@ -91,8 +91,6 @@ const sendCommand = (portInstance, {cmd, actionDescription}) => {
 
 getSerialPort.then(({port, parser}) => {
 
-  logger.info('Listening for data ...');
-
   parser.on('data', (buffer) => {
 
     let data;
@@ -106,6 +104,10 @@ getSerialPort.then(({port, parser}) => {
 
     //data && data.speed && reportGraph(data.speed);
 
+  });
+
+  port.write('PA', () => {
+    logger.info('Listening for data ...');
   });
 
 
