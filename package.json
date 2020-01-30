@@ -5,6 +5,7 @@
   "main": "run.js",
   "dependencies": {
     "asciichart": "^1.5.9",
+    "firebase-admin": "^8.9.2",
     "jest": "^25.1.0",
     "moment": "^2.24.0",
     "nodemon": "^2.0.2",
@@ -13,7 +14,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
