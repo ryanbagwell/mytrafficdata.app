@@ -9,7 +9,7 @@ const queue = new MeasurementQueue({save: saveSpeedReport});
 
 function cleanup(port) {
   logger.info('Closing serial port');
-  port.close();
+  port.isOpen && port.close();
   logger.on('Shutting down ...');
 }
 
