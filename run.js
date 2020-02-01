@@ -27,4 +27,10 @@ getSerialPort.then(({port, parser}) => {
     logger.info('Listening for data ...');
   });
 
+  process.on('exit', () => {
+    logger.info('Closing serial port');
+    port.close();
+    logger.on('Shutting down ...');
+  });
+
 });
