@@ -29,10 +29,12 @@ module.exports = class MeasurementQueue {
 
   count() {
     const speeds = this.rawData.map(x => x.speed);
+    const magnitude = this.rawData.map(x => x.magnitude);
     this.rawData = [];
     this.save({
       time: moment().unix(),
-      speed: Math.max(...speeds), // should we average out the speed?
+      speed: Math.max(...speeds), // should we average out the speed?,
+      magnitude,
     });
     //logger.info(`Counted 1. Total: ${this.length}`);
   }
