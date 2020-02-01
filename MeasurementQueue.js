@@ -31,10 +31,10 @@ module.exports = class MeasurementQueue {
     const speeds = this.rawData.map(x => x.speed);
     const magnitudes = this.rawData.map(x => x.magnitude);
 
-    let speed = Math.max(speeds);
+    let speed = Math.max(...speeds);
 
     if (speed < 1) {
-      speed = Math.min(speeds);
+      speed = Math.min(...speeds);
     }
 
     this.rawData = [];
