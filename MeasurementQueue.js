@@ -40,7 +40,7 @@ module.exports = class MeasurementQueue {
     this.rawData = [];
     this.save({
       time: moment().unix(),
-      speed: Math.max(...speeds), // should we average out the speed?,
+      speed: speed, // should we average out the speed?,
       magnitude: Math.max(...magnitudes),
     });
     //logger.info(`Counted 1. Total: ${this.length}`);
