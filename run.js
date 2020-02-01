@@ -6,6 +6,14 @@ const saveSpeedReport = require('./saveSpeedReport');
 
 const queue = new MeasurementQueue({save: saveSpeedReport});
 
+
+function cleanup(port) {
+  logger.info('Closing serial port');
+  port.close();
+  logger.on('Shutting down ...');
+}
+
+
 getSerialPort.then(({port, parser}) => {
 
   parser.on('data', (buffer) => {
@@ -27,10 +35,7 @@ getSerialPort.then(({port, parser}) => {
     logger.info('Listening for data ...');
   });
 
-  process.on('exit', () => {
-    logger.info('Closing serial port');
-    port.close();
-    logger.on('Shutting down ...');
-  });
+  process.on('exit', cleanup(port));
+  process.on('SIGINT', cleanup(port));
 
 });
