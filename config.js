@@ -24,6 +24,7 @@ const defaultConf = {
   hibernateTime: 1,
   hibernateDelay: 0.5,
   direction: 'both',
+  reportTime: false,
 };
 
 
@@ -112,6 +113,11 @@ const confFunctions = {
   minimumMagnitude: (value = 0, port) => {
     return port.write(`M>${value}`);
   },
+  reportTime: (value = false, port) => {
+    if (value === true) {
+      return port.write('OT');
+    }
+  },
   save: (value = true, port) => {
     return value && port.write('A!');
   }
@@ -158,7 +164,7 @@ fs.readFile('./config.json', (err, data) => {
 
     setTimeout(() => {
       port.close();
-      process.exit();
+      process.exit(0);
     }, 2000);
 
   });
