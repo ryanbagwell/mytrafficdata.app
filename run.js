@@ -35,8 +35,8 @@ getSerialPort.then(({port, parser}) => {
     logger.info('Listening for data ...');
   });
 
-  process.on('SIGINT', cleanup(port));
-  process.on('exit', cleanup(port));
+  process.on('SIGINT', () => cleanup(port));
+  process.on('exit', () => cleanup(port));
 
 
 });
