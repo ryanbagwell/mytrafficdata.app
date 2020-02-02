@@ -37,7 +37,7 @@ module.exports = class MeasurementQueue {
       time: moment().unix(),
       measuredSpeed: speed, // should we average out the speed?,
       magnitude: magnitude,
-      correctedSpeed: speed / Math.cos(this.angle * Math.PI - 180),
+      correctedSpeed: speed / Math.cos(this.angle * Math.PI / 180),
     });
     logger.info(`Counted 1. Total: ${this.length}`);
   }
