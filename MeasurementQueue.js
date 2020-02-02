@@ -5,6 +5,7 @@ const moment = require('moment');
 module.exports = class MeasurementQueue {
 
   constructor(params = {}) {
+    this.angle = 45;
     this.rawData = [];
     this.counts = [];
 
@@ -34,8 +35,9 @@ module.exports = class MeasurementQueue {
     this.rawData = [];
     this.save({
       time: moment().unix(),
-      speed: speed, // should we average out the speed?,
+      measuredSpeed: speed, // should we average out the speed?,
       magnitude: magnitude,
+      correctedSpeed: speed / Math.cos(this.angle * Math.PI - 180),
     });
     logger.info(`Counted 1. Total: ${this.length}`);
   }
