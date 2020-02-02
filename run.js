@@ -22,7 +22,7 @@ getSerialPort.then(({port, parser}) => {
 
     try {
       data = JSON.parse(buffer.toString());
-      logger.silly(data);
+      logger.info(JSON.stringify(data));
     } catch (err) {
       return;
     }
@@ -35,7 +35,8 @@ getSerialPort.then(({port, parser}) => {
     logger.info('Listening for data ...');
   });
 
-  process.on('exit', cleanup(port));
   process.on('SIGINT', cleanup(port));
+  process.on('exit', cleanup(port));
+
 
 });

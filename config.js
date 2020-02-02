@@ -15,6 +15,7 @@ const defaultConf = {
   ledControl: false,
   powerLevel: 0, // 0 through 7, 7 is lowest power,
   minimumSpeed: 10,
+  minimumMagnitude: 0,
   bufferSize: 1024,
   sampleSize: 20000,
   numReports: 9,
@@ -107,6 +108,9 @@ const confFunctions = {
         cmd = 'R|';
     }
     return port.write(cmd);
+  },
+  minimumMagnitude: (value = 0, port) => {
+    return port.write(`M>${value}`);
   },
   save: (value = true, port) => {
     return value && port.write('A!');
