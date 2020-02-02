@@ -15,35 +15,29 @@ module.exports = class MeasurementQueue {
     this.counts.push(data);
   }
 
-  push({magnitude, speed}) {
+  push({magnitude, speed, time}) {
     magnitude = parseFloat(magnitude);
     speed = parseFloat(speed);
+    time = parseFloat(time);
 
     const last = this.rawData.slice(-1)[0];
 
-    last && magnitude < 30 && last.magnitude - magnitude >= 20 && this.count();
+    last && time - last.time > 1 && this.count();
 
-    this.rawData.push({magnitude, speed});
+    this.rawData.push({magnitude, speed, time});
 
   }
 
   count() {
-    const speeds = this.rawData.map(x => x.speed);
-    const magnitudes = this.rawData.map(x => x.magnitude);
-
-    let speed = Math.max(...speeds);
-
-    if (speed < 1) {
-      speed = Math.min(...speeds);
-    }
+    let {speed, magnitude} = this.rawData[0];
 
     this.rawData = [];
     this.save({
       time: moment().unix(),
       speed: speed, // should we average out the speed?,
-      magnitude: Math.max(...magnitudes),
+      magnitude: magnitude,
     });
-    //logger.info(`Counted 1. Total: ${this.length}`);
+    logger.info(`Counted 1. Total: ${this.length}`);
   }
 
   clear() {
