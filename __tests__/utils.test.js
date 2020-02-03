@@ -3,7 +3,7 @@ const {
   hoursToSeconds,
   calculateVehicleLength,
   correctForCosineError
-} = require('../utils');
+} = require('../daemon/utils');
 
 
 test('Can convert hours to seconds', () => {
