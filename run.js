@@ -13,6 +13,8 @@ const queue = new MeasurementQueue({
 });
 
 function cleanup(port) {
+  logger.info('Placing device in idle mode');
+  port.write('PI');
   logger.info('Closing serial port');
   port.isOpen && port.close();
   logger.info('Shutting down ...');
