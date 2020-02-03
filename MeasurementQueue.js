@@ -43,7 +43,11 @@ module.exports = class MeasurementQueue {
     // field of vision, so just update the live
     // count and do nothing else;
     if (queue.length === 1) {
-      return this.updateLive(initialReport);
+      return this.updateLive({
+        ...initialReport,
+        measuredSpeed: initialReport.speed,
+        correctedSpeed: correctForCosineError(initialReport.speed, this.angle),
+      });
     }
 
     // Now check if enough time has elapsed
