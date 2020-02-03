@@ -2,10 +2,15 @@
 const logger = require('./logger');
 const getSerialPort = require('./getSerialPort');
 const MeasurementQueue = require('./MeasurementQueue');
-const saveSpeedReport = require('./saveSpeedReport');
+const {
+  updateLiveSpeedReport,
+  saveSpeedReport
+} = require('./db');
 
-const queue = new MeasurementQueue({save: saveSpeedReport});
-
+const queue = new MeasurementQueue({
+  updateLive: updateLiveSpeedReport,
+  saveCount: saveSpeedReport,
+});
 
 function cleanup(port) {
   logger.info('Closing serial port');
@@ -13,7 +18,6 @@ function cleanup(port) {
   logger.info('Shutting down ...');
   process.exit(0);
 }
-
 
 getSerialPort.then(({port, parser}) => {
 
@@ -23,7 +27,7 @@ getSerialPort.then(({port, parser}) => {
 
     try {
       data = JSON.parse(buffer.toString());
-      logger.info(JSON.stringify(data));
+      logger.debug(JSON.stringify(data));
     } catch (err) {
       return;
     }

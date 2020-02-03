@@ -1,19 +1,22 @@
 const logger = require('./logger');
 const moment = require('moment');
+const {calculateVehicleLength, correctForCosineError} = require('./utils');
 
 
 module.exports = class MeasurementQueue {
 
   constructor(params = {}) {
+    this.timeSeparator = 1;
     this.angle = 45;
-    this.rawData = [];
+    this.queue = [];
     this.counts = [];
-
-    this.save = params.save || this.save;
+    this.saveCount = params.saveCount || function(){};
+    this.updateLive = params.updateLive || function(){};
   }
 
   save(data) {
     this.counts.push(data);
+    this.saveCount(data);
   }
 
   push({magnitude, speed, time}) {
@@ -21,35 +24,75 @@ module.exports = class MeasurementQueue {
     speed = parseFloat(speed);
     time = parseFloat(time);
 
-    const last = this.rawData.slice(-1)[0];
+    this.queue.push({
+      magnitude,
+      speed,
+      time: process.env.JEST_WORKER_ID === undefined ? moment().valueOf() / 1000 : time,
+    });
 
-    last && time - last.time > 1 && this.count();
-
-    this.rawData.push({magnitude, speed, time});
+    this.processQueue();
 
   }
 
-  count() {
-    let {speed, magnitude} = this.rawData[0];
+  processQueue() {
+    let {queue} = this;
+    let initialReport = queue[0];
 
-    this.rawData = [];
-    this.save({
-      time: moment().unix(),
-      measuredSpeed: speed, // should we average out the speed?,
-      magnitude: magnitude,
-      correctedSpeed: speed / Math.cos((this.angle - 10) * Math.PI / 180),
-    });
-    logger.info(`Counted 1. Total: ${this.length}`);
+    // only one item in the queue means
+    // the vehicle has just started to enter the
+    // field of vision, so just update the live
+    // count and do nothing else;
+    if (queue.length === 1) {
+      return this.updateLive(initialReport);
+    }
+
+    // Now check if enough time has elapsed
+    // to denote another vehicle, save that speed report, and
+    // clear the queue
+    let previousReport = queue[queue.length - 2];
+    let currentReport = queue[queue.length - 1];
+    let timeDiff = currentReport.time - previousReport.time;
+
+    logger.debug(`Report time difference: ${timeDiff}`);
+
+    if (currentReport.time - previousReport.time > 1) {
+      // account for random extra reports are more than 1 second
+      // than the previous report when there are only two reports
+      // in the queue by just removing the first report;
+      if (queue.length === 2) {
+        logger.info('Removing extra report');
+        return queue.shift();
+      }
+
+      const {magnitude, speed: measuredSpeed} = initialReport;
+
+      const correctedSpeed = correctForCosineError(measuredSpeed, this.angle),
+        startTime = initialReport.time,
+        endTime = initialReport.time;
+
+      this.saveCount({
+        startTime: initialReport.time,
+        endTime: initialReport.time,
+        measuredSpeed,
+        magnitude: magnitude,
+        correctedSpeed,
+        length: calculateVehicleLength(correctedSpeed, endTime - startTime),
+      });
+
+      this.queue = [];
+
+    }
+
   }
 
   clear() {
-    this.rawData = [];
+    this.queue = [];
+    this.counts = [];
     this.length = 0;
   }
 
   get length() {
     return this.counts.length;
   }
-
 
 }

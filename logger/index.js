@@ -6,7 +6,10 @@ const logger = winston.createLogger({
   levels: winston.config.syslog.levels,
   format: winston.format.cli(),
   transports: [
+    new winston.transports.Console({ level: 'debug' }),
     new winston.transports.Console({ level: 'info' }),
+    new winston.transports.Console({ level: 'warn' }),
+    new winston.transports.Console({ level: 'error' }),
   ]
 });
 
