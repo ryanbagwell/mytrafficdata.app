@@ -1,5 +1,4 @@
 const firebase = require('firebase-admin');
-const key = require('../serverKey.json');
 const logger = require('../logger');
 const moment = require('moment');
 const slugify = require('slugify');
