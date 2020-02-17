@@ -46,7 +46,7 @@ getSerialPort.then(({port, parser}) => {
     }
 
     if (data && data.speed) {
-      if (parseFloat(speed < 0)) {
+      if (parseFloat(data.speed < 0)) {
         outboundQueue.push(data);
       } else {
         inboundQueue.push(data);
