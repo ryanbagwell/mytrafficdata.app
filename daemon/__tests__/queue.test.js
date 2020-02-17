@@ -1,4 +1,4 @@
-const MeasurementQueue = require('../daemon/MeasurementQueue');
+const MeasurementQueue = require('../MeasurementQueue');
 const fs = require('fs');
 
 const testSets = [

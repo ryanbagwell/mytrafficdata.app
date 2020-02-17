@@ -73,7 +73,7 @@ export default ({correctedSpeed, magnitude, measuredSpeed, time}) => (
 
       <DataPoint>
         <Label>Magnitude</Label>
-        <Value>{time}</Value>
+        <Value>{magnitude}</Value>
       </DataPoint>
 
       <DataPoint>

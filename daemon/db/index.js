@@ -17,7 +17,7 @@ const LOCATION = slugify(process.env.LOCATION_DESCRIPTION)
 
 
 firebase.initializeApp({
-  credential: admin.credential.applicationDefault(),
+  credential: firebase.credential.applicationDefault(),
   databaseURL: process.env.databaseURL,
 });
 

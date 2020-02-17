@@ -123,29 +123,24 @@ const confFunctions = {
   }
 }
 
+module.exports = (port) => {
 
-fs.readFile('./config.json', (err, data) => {
+  fs.readFile('./config.json', (err, data) => {
 
-  let conf = {
-    ...defaultConf,
-  };
-
-  if (data) {
-    try {
-      conf = {
-        ...conf,
-        ...JSON.parse(data.toString()),
-      }
-    } catch (err) {
-      logger.error(err);
+    let conf = {
+      ...defaultConf,
     };
-  }
 
-  getSerialPort.then(({port, parser}) => {
-
-    parser.on('data', (buffer) => {
-      logger.info(buffer.toString())
-    });
+    if (data) {
+      try {
+        conf = {
+          ...conf,
+          ...JSON.parse(data.toString()),
+        }
+      } catch (err) {
+        logger.error(err);
+      };
+    }
 
     Object.entries(confFunctions).map(([name, func], i) => {
 
@@ -153,20 +148,12 @@ fs.readFile('./config.json', (err, data) => {
 
       try {
         func(value, port);
-        port.drain(() => {
-          logger.info(`Set value ${value} for ${name}`);
-        });
       } catch(err) {
         logger.error(err);
       }
 
     });
 
-    setTimeout(() => {
-      port.close();
-      process.exit(0);
-    }, 2000);
-
   });
 
-});
+}
