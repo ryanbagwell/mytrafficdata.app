@@ -33,9 +33,6 @@ function cleanup(port) {
 
 getSerialPort.then(({port, parser}) => {
 
-  const inboundQueue = new Inbound
-
-
   parser.on('data', (buffer) => {
 
     let data;
@@ -54,8 +51,6 @@ getSerialPort.then(({port, parser}) => {
       } else {
         inboundQueue.push(data);
       }
-    }
-
     }
 
   });

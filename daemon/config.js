@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 const logger = require('./logger');
-const getSerialPort = require('./getSerialPort');
-const commands = require('./commands');
 const fs = require('fs');
 
 
