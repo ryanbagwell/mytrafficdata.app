@@ -1,4 +1,7 @@
-const MeasurementQueue = require('../MeasurementQueue');
+const {
+  OutboundmMeasurementQueue,
+  InboundMeasurementQueue,
+} = require('../measurementQueue');
 const fs = require('fs');
 
 const testSets = [
@@ -28,7 +31,7 @@ test('Can count speed reports', () => {
     let liveCounts = 0,
       savedCounts = 0;
 
-    const queue = new MeasurementQueue({
+    const queue = new InboundMeasurementQueue({
       updateLive: (data) => {
         liveCounts++;
       },
@@ -70,7 +73,7 @@ test('Can count combined speed reports', () => {
     totalCars = 0;
 
 
-  const queue = new MeasurementQueue({
+  const queue = new InboundMeasurementQueue({
     updateLive: (data) => {
       liveCounts++;
     },

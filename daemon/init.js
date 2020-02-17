@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 const logger = require('./logger');
 const getSerialPort = require('./getSerialPort');
-const MeasurementQueue = require('./MeasurementQueue');
+const {
+  InboundMeasurementQueue,
+  OutboundMeasurementQueue,
+} = require('./measurementQueue');
 const {
   updateLiveSpeedReport,
   saveSpeedReport
@@ -9,7 +12,12 @@ const {
 const logOutput = require('./logOutput');
 const config = require('./config');
 
-const queue = new MeasurementQueue({
+const inboundQueue = new InboundMeasurementQueue({
+  updateLive: updateLiveSpeedReport,
+  saveCount: saveSpeedReport,
+});
+
+const outboundQueue = new OutboundMeasurementQueue({
   updateLive: updateLiveSpeedReport,
   saveCount: saveSpeedReport,
 });
@@ -25,6 +33,9 @@ function cleanup(port) {
 
 getSerialPort.then(({port, parser}) => {
 
+  const inboundQueue = new Inbound
+
+
   parser.on('data', (buffer) => {
 
     let data;
@@ -37,7 +48,15 @@ getSerialPort.then(({port, parser}) => {
       return;
     }
 
-    data && data.speed && queue.push(data);
+    if (data && data.speed) {
+      if (parseFloat(speed < 0)) {
+        outboundQueue.push(data);
+      } else {
+        inboundQueue.push(data);
+      }
+    }
+
+    }
 
   });
 

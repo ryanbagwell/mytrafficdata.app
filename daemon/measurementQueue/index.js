@@ -1,6 +1,6 @@
-const logger = require('./logger');
+const logger = require('../logger');
 const moment = require('moment');
-const {calculateVehicleLength, correctForCosineError} = require('./utils');
+const {calculateVehicleLength, correctForCosineError} = require('../utils');
 
 
 class BaseMeasurementQueue {
@@ -167,4 +167,9 @@ class OutboundMeasurementQueue extends BaseMeasurementQueue {
 
   }
 
+}
+
+module.exports = {
+  OutboundMeasurementQueue,
+  InboundMeasurementQueue,
 }

@@ -27,7 +27,7 @@ const updateLiveSpeedReport = async (data) => {
 }
 
 const saveSpeedReport = async (data) => {
-  return await firebase.database().ref(`speedreports/${LOCATION}/counts`)
+  return await firebase.database().ref(`speedreports/${LOCATION}/counts/${moment().format('YYYY-MM-DD')}`)
   .push(data);
 }
 
