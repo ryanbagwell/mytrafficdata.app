@@ -81,10 +81,10 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
       // account for random extra reports are more than  second
       // than the previous report when there are only two reports
       // in the queue by just removing the first report;
-      // if (queue.length === 2) {
-      //   logger.info('Removing extra report');
-      //   return queue.shift();
-      // }
+      if (queue.length === 2) {
+        logger.info('Removing extra report');
+        return queue.shift();
+      }
 
       const {magnitude, speed: measuredSpeed} = initialReport;
 
