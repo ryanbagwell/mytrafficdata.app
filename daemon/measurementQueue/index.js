@@ -56,6 +56,8 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
     let {queue} = this;
     let initialReport = queue[0];
 
+    console.log(this.queue);
+
     // only one item in the queue means
     // the vehicle has just started to enter the
     // field of vision, so just update the live
@@ -108,8 +110,6 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
       ];
 
     }
-
-    console.log(this.queue);
 
   }
 
