@@ -78,19 +78,19 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
     logger.debug(`Report time difference: ${timeDiff}`);
 
     if (currentReport.time - previousReport.time > 0.08) {
-      // account for random extra reports are more than 1 second
+      // account for random extra reports are more than  second
       // than the previous report when there are only two reports
       // in the queue by just removing the first report;
-      if (queue.length === 2) {
-        logger.info('Removing extra report');
-        return queue.shift();
-      }
+      // if (queue.length === 2) {
+      //   logger.info('Removing extra report');
+      //   return queue.shift();
+      // }
 
       const {magnitude, speed: measuredSpeed} = initialReport;
 
       const correctedSpeed = correctForCosineError(measuredSpeed, this.angle),
         startTime = initialReport.time,
-        endTime = initialReport.time;
+        endTime = previousReport.time;
 
       this.saveCount({
         startTime: initialReport.time,
@@ -103,7 +103,11 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
       logger.debug('Saved count');
 
-      this.queue = [];
+      this.queue = [
+        this.queue[this.queue.length - 1],
+      ];
+
+      this.processQueue();
 
     }
 
