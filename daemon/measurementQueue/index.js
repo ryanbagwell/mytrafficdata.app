@@ -77,7 +77,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
     logger.debug(`Report time difference: ${timeDiff}`);
 
-    if (currentReport.time - previousReport.time > 0.08) {
+    if (currentReport.time - previousReport.time > 0.09) {
       // account for random extra reports are more than  second
       // than the previous report when there are only two reports
       // in the queue by just removing the first report;
@@ -103,11 +103,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
       logger.debug('Saved count');
 
-      this.queue = [
-        this.queue[this.queue.length - 1],
-      ];
-
-      this.processQueue();
+      this.queue = [];
 
     }
 
