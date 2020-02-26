@@ -88,10 +88,11 @@ export default ({location = null}) => {
                   <td><strong>{hour}</strong></td>
                   {
                     chart[hour].map((cars, i) => {
-                      if (!totals[hour]) {
-                        totals[hour] = 0;
+                      if (!totals[i]) {
+                        totals[i] = 0;
                       }
-                      totals[hour] = totals[hour] + cars;
+                      totals[i] = totals[i] + cars;
+
                       return <td>{cars}</td>
                     })
                   }
@@ -101,10 +102,10 @@ export default ({location = null}) => {
           }
 
           <tr>
-              <td>Totals:</td>
-              {
-                totals.map((val) => <td>{val}</td>)
-              }
+            <td>Totals:</td>
+            {
+              totals.map((val) => <td>{val}</td>)
+            }
           </tr>
 
 
