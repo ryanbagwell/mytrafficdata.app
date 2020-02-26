@@ -11,7 +11,7 @@ const calculateVehicleLength = (speed, travelTime) => {
 }
 
 const correctForCosineError = (measuredSpeed, angle) => {
-  return measuredSpeed / Math.cos((angle - 10) * Math.PI / 180);
+  return measuredSpeed / Math.cos(angle * Math.PI / 180);
 }
 
 module.exports = {
