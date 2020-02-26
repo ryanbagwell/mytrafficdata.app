@@ -77,7 +77,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
     logger.debug(`Report time difference: ${timeDiff}`);
 
-    if (currentReport.time - previousReport.time > 1) {
+    if (currentReport.time - previousReport.time > 0.08) {
       // account for random extra reports are more than 1 second
       // than the previous report when there are only two reports
       // in the queue by just removing the first report;
