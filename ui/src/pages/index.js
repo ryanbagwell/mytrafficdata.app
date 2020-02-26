@@ -7,8 +7,7 @@ import SEO from "../components/seo"
 
 import LiveSpeedDialog from '../components/LiveSpeedDialog';
 
-import firebase from 'firebase';
-
+import firebase from 'firebase/app/dist/index.cjs';
 
 const database = firebase.database();
 
