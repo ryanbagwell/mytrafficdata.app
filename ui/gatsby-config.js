@@ -1,3 +1,8 @@
+process.env.GATSBY_FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
+process.env.GATSBY_FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
+
+
+
 module.exports = {
   siteMetadata: {
     title: `Gatsby Default Starter`,

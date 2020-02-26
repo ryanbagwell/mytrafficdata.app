@@ -1,55 +1,14 @@
 import React from "react"
-import { Link } from "gatsby"
-
+import PropTypes from 'prop-types';
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
-
 import LiveSpeedDialog from '../components/LiveSpeedDialog';
+import getDB from '../utils/getDB';
+import LocationChooser from '../components/LocationChooser';
+import CountReport from '../components/CountReport';
 
-import firebase from 'firebase/app/dist/index.cjs';
-
-const database = firebase.database();
-
-
-
-class ReportList extends React.Component {
-
-  state = {
-    reports: [],
-  }
-
-  componentDidMount = () => {
-    database.ref('speedreports').orderByKey().once('value').then((snapshot) => {
-      this.setState({
-        reports: Object.keys(snapshot.toJSON()).reverse(),
-      })
-    });
-  }
-
-  handleOnChange = (e) => {
-    this.props.onChange && this.props.onChange(e.currentTarget.value);
-  }
-
-  render() {
-
-    return (
-      <form>
-        <label>Select a count location:</label>
-        <select onChange={this.handleOnChange}>
-          <option value="">Please Select</option>
-          {this.state.reports.map(name => (
-            <option value={name}>{name}</option>
-          ))}
-        </select>
-      </form>
-    );
-  }
-}
-
-
-
-
+const database = getDB();
 
 
 
@@ -95,9 +54,11 @@ export default class IndexPage extends React.Component {
       <Layout>
         <SEO title="Home" />
         <div>
-          <ReportList onChange={this.updateLocation} />
+          <LocationChooser onChange={this.updateLocation} />
           {this.state.liveSpeed && <LiveSpeedDialog {...this.state.liveSpeed} /> }
         </div>
+
+        {this.state.location && <CountReport location={this.state.location} />}
       </Layout>
     )
   }

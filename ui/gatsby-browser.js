@@ -6,14 +6,14 @@
 
 // You can delete this file if you're not using it
 
-import firebase from 'firebase';
+// import firebase from 'firebase';
 
-var firebaseConfig = {
-  apiKey: 'AIzaSyAuBHGB9Yw2S_HGnuXOBdw58MtEA57d4QI',
-  databaseURL: "https://speedcamera-b5aae.firebaseio.com",
-};
+// var firebaseConfig = {
+//   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
+//   databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
+// };
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
 // const database = firebase.database();
 
