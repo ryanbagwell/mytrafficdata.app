@@ -101,6 +101,8 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
         length: calculateVehicleLength(correctedSpeed, endTime - startTime),
       });
 
+      logger.debug('Saved count');
+
       this.queue = [];
 
     }
