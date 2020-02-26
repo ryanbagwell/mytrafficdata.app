@@ -1,6 +1,6 @@
 const firebase = require('firebase-admin');
 const logger = require('../logger');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const slugify = require('slugify');
 
 if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -10,7 +10,7 @@ if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
 
 if (!process.env.LOCATION_DESCRIPTION) {
   logger.info('No LOCATION_DESCRIPTION environment variable set. Using the current time as the default location')
-  process.env.LOCATION_DESCRIPTION = moment().format('YYYY-MM-DD-kk-mm-ss');
+  process.env.LOCATION_DESCRIPTION = moment().tz('America/New_York').format('YYYY-MM-DD-kk-mm-ss');
 }
 
 const LOCATION = slugify(process.env.LOCATION_DESCRIPTION)
@@ -22,13 +22,16 @@ firebase.initializeApp({
 });
 
 const updateLiveSpeedReport = async (data) => {
-  return await firebase.database().ref(`speedreports/${LOCATION}/live`)
-    .set(data);
+  return await firebase.database().ref(
+    `speedreports/${LOCATION}/live`
+  ).set(data);
 }
 
 const saveSpeedReport = async (data) => {
-  return await firebase.database().ref(`speedreports/${LOCATION}/counts/${moment().format('YYYY-MM-DD')}`)
-  .push(data);
+  let dateStr = moment().tz('America/New_York').format('YYYY-MM-DD');
+  return await firebase.database().ref(
+    `speedreports/${LOCATION}/counts/${dateStr}`
+  ).push(data);
 }
 
 module.exports = {
