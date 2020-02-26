@@ -109,6 +109,8 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
     }
 
+    console.log(this.queue);
+
   }
 
 }
