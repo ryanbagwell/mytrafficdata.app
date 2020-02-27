@@ -11,7 +11,7 @@ class BaseMeasurementQueue {
 
   constructor(params = {}) {
     this.timeSeparator = 1;
-    this.angle = 45;
+    this.angle = 0;
     this.queue = [];
     this.counts = [];
     this.saveCount = params.saveCount || function(){};
@@ -62,7 +62,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
   constructor(params) {
     super(params);
 
-    const angle = calculateTargetAngle(
+    this.angle = calculateTargetAngle(
       this.distanceToLaneCenter,
       this.initialLineOfSiteDistance
     );
