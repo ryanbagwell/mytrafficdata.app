@@ -1,6 +1,10 @@
 const logger = require('../logger');
 const moment = require('moment');
-const {calculateVehicleLength, correctForCosineError} = require('../utils');
+const {
+  calculateVehicleLength,
+  correctForCosineError,
+  calculateTargetAngle
+} = require('../utils');
 
 
 class BaseMeasurementQueue {
@@ -12,6 +16,9 @@ class BaseMeasurementQueue {
     this.counts = [];
     this.saveCount = params.saveCount || function(){};
     this.updateLive = params.updateLive || function(){};
+    this.distanceToLaneCenter = params.distanceToLaneCenter;
+    this.initialLineOfSiteDistance = params.initialLineOfSiteDistance;
+    this.finalLineOfSiteDistance = params.finalLineOfSiteDistance;
   }
 
   save(data) {
@@ -51,6 +58,13 @@ class BaseMeasurementQueue {
 }
 
 class InboundMeasurementQueue extends BaseMeasurementQueue {
+
+  constructor(params) {
+    super(params);
+
+    const angle = calculateTargetAngle(this.distanceToLaneCenter, lineOfSiteDistance);
+
+  }
 
   processQueue() {
     let {queue} = this;

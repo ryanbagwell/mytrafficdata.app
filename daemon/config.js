@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const logger = require('./logger');
 const fs = require('fs');
-
+const memoize = require('memoize-one');
 
 const defaultConf = {
   json: true, //json reporting
@@ -23,6 +23,10 @@ const defaultConf = {
   hibernateDelay: 0.5,
   direction: 'both',
   reportTime: false,
+  distanceToInboundLaneCenter: 10,
+  initialInboundLineOfSiteDistance: 80,
+  finalInboundLineOfSiteDistance: 30,
+  distanceToOutboundLaneCenter: 20,
 };
 
 
@@ -121,37 +125,33 @@ const confFunctions = {
   }
 }
 
-module.exports = (port) => {
+const configureDevice = (port) => {
 
-  fs.readFile('./config.json', (err, data) => {
+  const conf = getConfig();
 
-    let conf = {
-      ...defaultConf,
-    };
+  Object.entries(confFunctions).map(([name, func], i) => {
+    const value = conf[name];
 
-    if (data) {
-      try {
-        conf = {
-          ...conf,
-          ...JSON.parse(data.toString()),
-        }
-      } catch (err) {
-        logger.error(err);
-      };
+    try {
+      func(value, port);
+    } catch(err) {
+      logger.error(err);
     }
-
-    Object.entries(confFunctions).map(([name, func], i) => {
-
-      const value = conf[name];
-
-      try {
-        func(value, port);
-      } catch(err) {
-        logger.error(err);
-      }
-
-    });
 
   });
 
 }
+
+const getConfig = memoize((path = './config.json') => {
+  const data = fs.readFileSync(path);
+  return {
+    ...defaultConf,
+    ...JSON.parse(data.toString()),
+  };
+});
+
+module.exports = {
+  configureDevice,
+  getConfig,
+}
+

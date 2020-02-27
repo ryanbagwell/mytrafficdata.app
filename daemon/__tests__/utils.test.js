@@ -2,7 +2,9 @@ const {
   milesToFeet,
   hoursToSeconds,
   calculateVehicleLength,
-  correctForCosineError
+  correctForCosineError,
+  calculateRangeToTarget,
+  calculateTargetAngle,
 } = require('../utils');
 
 
@@ -19,5 +21,21 @@ test('Can calculate vehicle length', () => {
 });
 
 test('Can correct cosine error', () => {
-  expect(Math.round(correctForCosineError(40, 20 + 10))).toBe(43);
+  const distanceToLaneCenter = 20;
+  const lineOfSiteDistance = 80;
+  const angle = calculateTargetAngle(distanceToLaneCenter, lineOfSiteDistance);
+  expect(Math.round(correctForCosineError(29.1, angle))).toBe(30);
 })
+
+test('Can calculate range to target', () => {
+  const distanceToLaneCenter = 20;
+  const lineOfSiteDistance = 80;
+  expect(Math.round(calculateRangeToTarget(distanceToLaneCenter, lineOfSiteDistance))).toBe(77);
+});
+
+test('Can calculate target angle', () => {
+  const distanceToLaneCenter = 20;
+  const lineOfSiteDistance = 80;
+  const angle = calculateTargetAngle(distanceToLaneCenter, lineOfSiteDistance);
+  expect(Math.round(angle)).toBe(14);
+});

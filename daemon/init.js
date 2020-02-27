@@ -10,11 +10,16 @@ const {
   saveSpeedReport
 } = require('./db');
 const logOutput = require('./logOutput');
-const config = require('./config');
+const {getConfig, configureDevice} = require('./config');
+
+const config = getConfig();
 
 const inboundQueue = new InboundMeasurementQueue({
   updateLive: updateLiveSpeedReport,
   saveCount: saveSpeedReport,
+  distanceToLaneCenter: config.distanceToInboundLaneCenter,
+  finalLineOfSiteDistance: config.finalInboundLineOfSiteDistance,
+  initialLineOfSiteDistance: config.initialInboundLineOfSiteDistance,
 });
 
 const outboundQueue = new OutboundMeasurementQueue({
@@ -30,6 +35,8 @@ function cleanup(port) {
   logger.info('Shutting down ...');
   process.exit(0);
 }
+
+
 
 getSerialPort.then(({port, parser}) => {
 
@@ -55,7 +62,7 @@ getSerialPort.then(({port, parser}) => {
 
   });
 
-  config(port);
+  configureDevice(port);
 
   port.write('PA', () => {
     logger.info('Listening for data ...');
