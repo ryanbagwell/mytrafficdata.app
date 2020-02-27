@@ -62,7 +62,10 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
   constructor(params) {
     super(params);
 
-    const angle = calculateTargetAngle(this.distanceToLaneCenter, lineOfSiteDistance);
+    const angle = calculateTargetAngle(
+      this.distanceToLaneCenter,
+      this.initialLineOfSiteDistance
+    );
 
   }
 
