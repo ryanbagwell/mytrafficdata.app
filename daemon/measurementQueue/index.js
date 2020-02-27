@@ -103,9 +103,8 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
       logger.debug('Saved count');
 
-      this.queue = [
-        currentReport,
-      ];
+      this.queue = [];
+      this.push(currentReport);
 
     }
 
