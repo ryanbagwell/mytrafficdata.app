@@ -19,7 +19,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "./node_modules/.bin/forever start init.js",
+    "stop": "./node_modules/.bin/forever stopall"
   },
   "author": "",
   "license": "ISC",
