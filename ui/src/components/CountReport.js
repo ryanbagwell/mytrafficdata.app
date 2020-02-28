@@ -19,6 +19,10 @@ const Title = styled.div`
   align-items: center;
 `
 
+const DailyTotal = styled.div`
+  text-align: center;
+`
+
 
 
 
@@ -36,13 +40,15 @@ export default ({location = null}) => {
 
       const maxSpeed = Math.max(...counts.map(c => c.correctedSpeed))
 
-      const columns = Math.ceil(Math.ceil(maxSpeed) / 5 + 2);
-
-      console.log(`Found ${counts.length} vehicles`);
+      const columns = Math.round(Math.round(maxSpeed) / 5 + 1);
 
       const chart = counts.reduce((final, current) => {
         let hour = moment.unix(current.startTime).format('H');
-        let range = Math.floor(current.correctedSpeed / 5);
+        let range = Math.floor(current.correctedSpeed / 5) - 1;
+
+        if (range < 1) {
+          range = 0;
+        }
 
         if (!final[hour]) {
           final[hour] = Array(columns).fill(0);
@@ -61,6 +67,25 @@ export default ({location = null}) => {
 
   const totals = [];
 
+
+  const rows = chart && Object.keys(chart).map((hour, i) => {
+    return (
+      <tr key={i}>
+        <td><strong>{hour}</strong></td>
+        {
+          chart[hour].map((cars, i) => {
+            if (!totals[i]) {
+              totals[i] = 0;
+            }
+            totals[i] = totals[i] + cars;
+
+            return <td key={i}>{cars}</td>
+          })
+        }
+      </tr>
+    )
+  })
+
   return (
     <Container>
       <Title>
@@ -76,44 +101,32 @@ export default ({location = null}) => {
       </Title>
 
       {chart && (
+      <DailyTotal>
+        Daily total: {totals.reduce((final, current) => final + current, 0)}
+      </DailyTotal>
+      )}
+
+      {chart && (
         <table>
 
           <thead>
             <tr>
               <th>Hour</th>
               {Object.values(chart)[0].map((val, i) => {
-                return <th key={i}>{i * 5} - {i * 5 + 4} mph</th>
+                return <th key={i}>{i * 5 + 1} - {i * 5 + 5} mph</th>
               })}
             </tr>
           </thead>
 
           <tbody>
-            {
-              Object.keys(chart).map((hour, i) => {
-                return (
-                  <tr key={i}>
-                    <td><strong>{hour}</strong></td>
-                    {
-                      chart[hour].map((cars, i) => {
-                        if (!totals[i]) {
-                          totals[i] = 0;
-                        }
-                        totals[i] = totals[i] + cars;
-
-                        return <td key={i}>{cars}</td>
-                      })
-                    }
-                  </tr>
-                )
-              })
-            }
-
             <tr>
               <td>Totals:</td>
               {
                 totals.map((val, i) => <td key={i}>{val}</td>)
               }
             </tr>
+
+            {rows}
 
           </tbody>
 
