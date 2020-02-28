@@ -36,7 +36,7 @@ export default ({location = null}) => {
 
       const maxSpeed = Math.max(...counts.map(c => c.correctedSpeed))
 
-      const columns = Math.ceil(maxSpeed) / 5 + 2;
+      const columns = Math.ceil(Math.ceil(maxSpeed) / 5 + 2);
 
       console.log(`Found ${counts.length} vehicles`);
 
