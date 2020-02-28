@@ -34,6 +34,10 @@ export default ({location = null}) => {
       const data = snapshot.toJSON();
       const counts = Object.values(data);
 
+      const maxSpeed = Math.max(...counts.map(c => c.correctedSpeed))
+
+      const columns = Math.ceil(maxSpeed) / 5 + 2;
+
       console.log(`Found ${counts.length} vehicles`);
 
       const chart = counts.reduce((final, current) => {
@@ -41,7 +45,7 @@ export default ({location = null}) => {
         let range = Math.floor(current.correctedSpeed / 5);
 
         if (!final[hour]) {
-          final[hour] = Array(20).fill(0);
+          final[hour] = Array(columns).fill(0);
         }
 
         final[hour][range] = final[hour][range] + 1;
@@ -74,40 +78,44 @@ export default ({location = null}) => {
       {chart && (
         <table>
 
-          <tr>
-            <th>Hour</th>
-            {Object.values(chart)[0].map((val, i) => {
-              return <th>{i * 5} - {i * 5 + 4} mph</th>
-            })}
-          </tr>
+          <thead>
+            <tr>
+              <th>Hour</th>
+              {Object.values(chart)[0].map((val, i) => {
+                return <th key={i}>{i * 5} - {i * 5 + 4} mph</th>
+              })}
+            </tr>
+          </thead>
 
-          {
-            Object.keys(chart).map((hour, i) => {
-              return (
-                <tr>
-                  <td><strong>{hour}</strong></td>
-                  {
-                    chart[hour].map((cars, i) => {
-                      if (!totals[i]) {
-                        totals[i] = 0;
-                      }
-                      totals[i] = totals[i] + cars;
-
-                      return <td>{cars}</td>
-                    })
-                  }
-                </tr>
-              )
-            })
-          }
-
-          <tr>
-            <td>Totals:</td>
+          <tbody>
             {
-              totals.map((val) => <td>{val}</td>)
-            }
-          </tr>
+              Object.keys(chart).map((hour, i) => {
+                return (
+                  <tr key={i}>
+                    <td><strong>{hour}</strong></td>
+                    {
+                      chart[hour].map((cars, i) => {
+                        if (!totals[i]) {
+                          totals[i] = 0;
+                        }
+                        totals[i] = totals[i] + cars;
 
+                        return <td key={i}>{cars}</td>
+                      })
+                    }
+                  </tr>
+                )
+              })
+            }
+
+            <tr>
+              <td>Totals:</td>
+              {
+                totals.map((val, i) => <td key={i}>{val}</td>)
+              }
+            </tr>
+
+          </tbody>
 
         </table>
       )}
@@ -115,10 +123,5 @@ export default ({location = null}) => {
     </Container>
 
   )
-
-
 }
-
-
-
 

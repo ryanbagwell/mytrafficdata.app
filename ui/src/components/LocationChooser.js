@@ -7,7 +7,7 @@ const database = getDB();
 
 export default class LocationChooser extends React.Component {
 
-  defaultProps = {
+  static defaultProps = {
     onChange: PropTypes.func,
   }
 
@@ -35,7 +35,7 @@ export default class LocationChooser extends React.Component {
         <select onChange={this.handleOnChange}>
           <option value="">Please Select</option>
           {this.state.reports.map(name => (
-            <option value={name}>{name}</option>
+            <option key={name} value={name}>{name}</option>
           ))}
         </select>
       </form>
