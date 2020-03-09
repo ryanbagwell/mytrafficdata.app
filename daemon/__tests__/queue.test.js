@@ -45,20 +45,20 @@ test('Can count speed reports', () => {
 
     // we have to add an extra report that's more than 1 second longer
     // to account for the next car
-    let last = json.pop();
+    let last = json[json.length - 1];
 
     json = [
       ...json,
-      last,
       {
         ...last,
-        time: last.time + 1.1
+        time: parseFloat(last.time) + 1.1,
+        speed: parseFloat(last.speed) + 4,
       }
     ]
 
     json.map(item => queue.push(item));
 
-    expect(liveCounts).toBe(count);
+    expect(liveCounts).toBe(count + 1);
     expect(savedCounts).toBe(count);
 
   })
@@ -82,17 +82,29 @@ test('Can count combined speed reports', () => {
     }
   });
 
-  testSets.map(({count, fileName}) => {
+  testSets.map(({count, fileName}, x) => {
     let data = fs.readFileSync(`${__dirname}/data/${fileName}`);
     let json = JSON.parse(data.toString());
-    json.map(item => queue.push(item));
+
+    json.map((item, i) => {
+      queue.push({
+        ...item,
+        speed: i === 0 ? item.speed * 2 : item.speed,
+      })
+    });
+
+    if (x === testSets.length - 1) {
+      queue.push({
+        ...json[json.length - 1],
+        speed: 80,
+      })
+    }
+
     totalCars = totalCars + count;
   })
 
-  expect(liveCounts).toBe(totalCars);
-  expect(savedCounts).toBe(totalCars - 1);
-
-
+  expect(liveCounts).toBe(totalCars + 1);
+  expect(savedCounts).toBe(totalCars);
 
 });
 

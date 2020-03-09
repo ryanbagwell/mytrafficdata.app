@@ -1,10 +1,17 @@
 const logger = require('../logger');
 const moment = require('moment');
 const {
+  inboundSpeedIncrease
+} = require('./delineationStrategies');
+const {
+  rangeEstimationStrategy
+} = require('./speedCorrectionStrategies');
+const {
   calculateVehicleLength,
   correctForCosineError,
   calculateTargetAngle
 } = require('../utils');
+
 
 
 class BaseMeasurementQueue {
@@ -17,12 +24,18 @@ class BaseMeasurementQueue {
     this.saveCount = params.saveCount || function(){};
     this.updateLive = params.updateLive || function(){};
     this.distanceToLaneCenter = params.distanceToLaneCenter;
+    this.deviceMaxRange = params.deviceMaxRange || 80;
+    this.delinationStrategy = params.delinationStrategy || inboundSpeedIncrease;
+    this.speedCorrectionStrategy = params.speedCorrectionStrategy || rangeEstimationStrategy;
+
+
     this.initialLineOfSiteDistance = params.initialLineOfSiteDistance;
     this.finalLineOfSiteDistance = params.finalLineOfSiteDistance;
+
   }
 
   save(data) {
-    this.counts.push(data);
+    //this.counts.push(data);
     this.saveCount(data);
   }
 
@@ -61,70 +74,77 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
   constructor(params) {
     super(params);
+  }
 
-    this.angle = calculateTargetAngle(
+  updateLiveSpeed(speedReport) {
+
+    let angle = calculateTargetAngle(
       this.distanceToLaneCenter,
       this.initialLineOfSiteDistance
     );
 
+    this.updateLive({
+      ...speedReport,
+      measuredSpeed: speedReport.speed,
+      correctedSpeed: correctForCosineError(speedReport.speed, angle),
+    });
+
+  }
+
+  save(previousReport, currentReport) {
+
+    const {magnitude, speed: measuredSpeed} = previousReport;
+
+    const correctedSpeed = this.speedCorrectionStrategy(
+      previousReport,
+      currentReport,
+      this.distanceToLaneCenter,
+      this.maxDeviceRange
+    ),
+      startTime = previousReport.time,
+      endTime = currentReport.time;
+
+
+    this.saveCount({
+      startTime: startTime,
+      endTime: endTime,
+      measuredSpeed,
+      magnitude: magnitude,
+      correctedSpeed,
+      length: calculateVehicleLength(correctedSpeed, endTime - startTime),
+    });
+
+    logger.debug('Saved count');
+
+  }
+
+  isNewVehicle(previousReport, currentReport) {
+    return this.delinationStrategy(previousReport, currentReport);
   }
 
   processQueue() {
     let {queue} = this;
-    let initialReport = queue[0];
 
-    // only one item in the queue means
-    // the vehicle has just started to enter the
-    // field of vision, so just update the live
-    // count and do nothing else;
     if (queue.length === 1) {
-      return this.updateLive({
-        ...initialReport,
-        measuredSpeed: initialReport.speed,
-        correctedSpeed: correctForCosineError(initialReport.speed, this.angle),
-      });
+      return this.updateLiveSpeed(queue[0]);
+    };
+
+    const previousReport = queue.shift();
+    const currentReport = queue[0];
+
+    /*
+     *  The reported speed of an inbound car should be decreasing
+     *  due to the cosine error (unless it suddenly and dramatically
+     *  accelerated while in the antenna view)
+     */
+
+    const isNew = this.isNewVehicle(previousReport, currentReport);
+
+    if (isNew) {
+      this.save(previousReport, currentReport);
+      this.updateLiveSpeed(currentReport);
     }
-
-    // Now check if enough time has elapsed
-    // to denote another vehicle, save that speed report, and
-    // clear the queue
-    let previousReport = queue[queue.length - 2];
-    let currentReport = queue[queue.length - 1];
-    let timeDiff = currentReport.time - previousReport.time;
-
-    logger.debug(`Report time difference: ${timeDiff}`);
-
-    if (currentReport.time - previousReport.time > 0.3) {
-      // account for random extra reports are more than  second
-      // than the previous report when there are only two reports
-      // in the queue by just removing the first report;
-      if (queue.length === 2) {
-        logger.info('Removing extra report');
-        return queue.shift();
-      }
-
-      const {magnitude, speed: measuredSpeed} = initialReport;
-
-      const correctedSpeed = correctForCosineError(measuredSpeed, this.angle),
-        startTime = initialReport.time,
-        endTime = previousReport.time;
-
-      this.saveCount({
-        startTime: initialReport.time,
-        endTime: initialReport.time,
-        measuredSpeed,
-        magnitude: magnitude,
-        correctedSpeed,
-        length: calculateVehicleLength(correctedSpeed, endTime - startTime),
-      });
-
-      logger.debug('Saved count');
-
-      this.queue = [];
-      this.push(currentReport);
-
-    }
-
+  
   }
 
 }
@@ -180,6 +200,8 @@ class OutboundMeasurementQueue extends BaseMeasurementQueue {
         correctedSpeed,
         length: calculateVehicleLength(correctedSpeed, endTime - startTime),
       });
+
+
 
       this.queue = [];
 

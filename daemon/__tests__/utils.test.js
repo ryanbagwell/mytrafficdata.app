@@ -22,8 +22,8 @@ test('Can calculate vehicle length', () => {
 
 test('Can correct cosine error', () => {
   const distanceToLaneCenter = 20;
-  const lineOfSiteDistance = 80;
-  const angle = calculateTargetAngle(distanceToLaneCenter, lineOfSiteDistance);
+  const lineOfSightDistanceToTarget = 80;
+  const angle = calculateTargetAngle(null, lineOfSightDistanceToTarget, distanceToLaneCenter);
   expect(Math.round(correctForCosineError(29.1, angle))).toBe(30);
 })
 
@@ -33,9 +33,25 @@ test('Can calculate range to target', () => {
   expect(Math.round(calculateRangeToTarget(distanceToLaneCenter, lineOfSiteDistance))).toBe(77);
 });
 
-test('Can calculate target angle', () => {
+test('Can calculate target angle from los distance', () => {
   const distanceToLaneCenter = 20;
-  const lineOfSiteDistance = 80;
-  const angle = calculateTargetAngle(distanceToLaneCenter, lineOfSiteDistance);
+  const lineOfSightDistanceToTarget = 80;
+  const angle = calculateTargetAngle(
+    null,
+    lineOfSightDistanceToTarget,
+    distanceToLaneCenter
+  );
   expect(Math.round(angle)).toBe(14);
+});
+
+
+test('Can calculate target angle from range to target', () => {
+  const distanceToLaneCenter = 20;
+  const rangeToTarget = 30;
+  const angle = calculateTargetAngle(
+    rangeToTarget,
+    null,
+    distanceToLaneCenter
+  );
+  expect(Math.round(angle)).toBe(34);
 });
