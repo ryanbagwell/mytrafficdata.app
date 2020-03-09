@@ -13,7 +13,7 @@ exports.inboundSpeedIncrease = (previousReport, currentReport) => {
 
   const speedDiff = currentReport.speed -  previousReport.speed;
 
-  if (speedDiff >= 10) return true;
+  if (speedDiff >= 9) return true;
 
   return false;
 
