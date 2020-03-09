@@ -8,10 +8,10 @@ exports.rangeEstimationStrategy = (
   previousReport = null,
   currentReport,
   distanceToLaneCenter,
-  maxDeviceRange
+  deviceMaxRange
 ) => {
 
-  const maxPossibleTargetRange = calculateRangeToTarget(distanceToLaneCenter, maxDeviceRange);
+  const maxPossibleTargetRange = calculateRangeToTarget(distanceToLaneCenter, deviceMaxRange);
 
   let rangeToTarget = null;
 
@@ -27,7 +27,7 @@ exports.rangeEstimationStrategy = (
    *  If the time between reports is > 3 seconds,
    *  also assume the vehicle is at its farthest point
    */
-  if (currentReport.time - previousReport.time > 3) {
+  if (previousReport && currentReport.time - previousReport.time > 3) {
     rangeToTarget = maxPossibleTargetRange;
   }
 
@@ -41,7 +41,7 @@ exports.rangeEstimationStrategy = (
 
   rangeToTarget = maxPossibleTargetRange / 2;
 
-  const angle = calculateTargetAngle({distanceToLaneCenter, rangeToTarget})
+  const angle = calculateTargetAngle(rangeToTarget, null, distanceToLaneCenter);
 
   return correctForCosineError(currentReport.speed, angle);
 

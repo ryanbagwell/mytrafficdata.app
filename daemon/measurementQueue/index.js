@@ -78,15 +78,17 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
   updateLiveSpeed(speedReport) {
 
-    let angle = calculateTargetAngle(
+    const correctedSpeed = this.speedCorrectionStrategy(
+      null,
+      speedReport,
       this.distanceToLaneCenter,
-      this.initialLineOfSiteDistance
+      this.deviceMaxRange
     );
 
     this.updateLive({
       ...speedReport,
       measuredSpeed: speedReport.speed,
-      correctedSpeed: correctForCosineError(speedReport.speed, angle),
+      correctedSpeed,
     });
 
   }
@@ -99,7 +101,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
       previousReport,
       currentReport,
       this.distanceToLaneCenter,
-      this.maxDeviceRange
+      this.deviceMaxRange
     ),
       startTime = previousReport.time,
       endTime = currentReport.time;

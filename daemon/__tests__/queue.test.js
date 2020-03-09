@@ -2,6 +2,10 @@ const {
   OutboundmMeasurementQueue,
   InboundMeasurementQueue,
 } = require('../measurementQueue');
+const {getConfig} = require('../config');
+
+const config = getConfig();
+
 const fs = require('fs');
 
 const testSets = [
@@ -31,13 +35,17 @@ test('Can count speed reports', () => {
     let liveCounts = 0,
       savedCounts = 0;
 
+    console.log(config.deviceMaxRange);
+
     const queue = new InboundMeasurementQueue({
       updateLive: (data) => {
         liveCounts++;
       },
       saveCount: (data) => {
         savedCounts++;
-      }
+      },
+      distanceToLaneCenter: config.distanceToInboundLaneCenter,
+      deviceMaxRange: config.deviceMaxRange,
     });
 
     let data = fs.readFileSync(`${__dirname}/data/${fileName}`);
@@ -79,7 +87,9 @@ test('Can count combined speed reports', () => {
     },
     saveCount: (data) => {
       savedCounts++;
-    }
+    },
+    distanceToLaneCenter: config.distanceToInboundLaneCenter,
+    deviceMaxRange: config.deviceMaxRange,
   });
 
   testSets.map(({count, fileName}, x) => {
