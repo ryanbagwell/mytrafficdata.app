@@ -20,6 +20,7 @@ const inboundQueue = new InboundMeasurementQueue({
   distanceToLaneCenter: config.distanceToInboundLaneCenter,
   finalLineOfSiteDistance: config.finalInboundLineOfSiteDistance,
   initialLineOfSiteDistance: config.initialInboundLineOfSiteDistance,
+  deviceMaxRange: config.deviceMaxRange,
 });
 
 const outboundQueue = new OutboundMeasurementQueue({
