@@ -6636,7 +6636,7 @@ human-signals@^1.1.1:
 
 humanize@^0.0.9:
   version "0.0.9"
-  resolved "http://npmregistry.hzdg.com/humanize/-/humanize-0.0.9.tgz#1994ffaecdfe9c441ed2bdac7452b7bb4c9e41a4"
+  resolved "https://registry.npmjs.org/humanize/-/humanize-0.0.9.tgz#1994ffaecdfe9c441ed2bdac7452b7bb4c9e41a4"
   integrity sha1-GZT/rs3+nEQe0r2sdFK3u0yeQaQ=
 
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
@@ -9377,7 +9377,7 @@ pend@~1.2.0:
 
 percentile@^1.2.3:
   version "1.2.3"
-  resolved "http://npmregistry.hzdg.com/percentile/-/percentile-1.2.3.tgz#0d4350449589ff9d2f0cd51f9520cfca23476779"
+  resolved "https://registry.npmjs.org/percentile/-/percentile-1.2.3.tgz#0d4350449589ff9d2f0cd51f9520cfca23476779"
   integrity sha512-vlp+oYo6vCv1GyutenKiU63i9UihrDzrj4PLIGThL9iC2Dy7nhxLeXJQX3HwGKHPP3IBrSZWHfDjZYmUOl6KVA==
 
 performance-now@^2.1.0:
