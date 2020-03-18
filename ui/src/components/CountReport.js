@@ -4,6 +4,8 @@ import ReportDateChooser from './ReportDateChooser';
 import getDB from '../utils/getDB';
 import moment from 'moment';
 import styled from 'styled-components';
+import percentile from 'percentile';
+import {numberFormat} from 'humanize';
 
 const database = getDB();
 
@@ -19,15 +21,29 @@ const Title = styled.div`
   align-items: center;
 `
 
-const DailyTotal = styled.div`
+const Stat = styled.div`
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 `
 
+const Stats = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-bottom: 30px;
+`;
+
+
+const formatNumber = (num) => numberFormat(num, 0);
 
 
 
 export default ({location = null}) => {
   const [date, setDate] = useState(null);
+  const [counts, setCounts] = useState(null);
+  const [speeds, setSpeeds] = useState(null);
   const [chart, setChart] = useState(null);
 
 
@@ -37,6 +53,10 @@ export default ({location = null}) => {
     database.ref(`speedreports/${location}/counts/${date}`).once('value').then((snapshot) => {
       const data = snapshot.toJSON();
       const counts = Object.values(data);
+
+      setCounts(counts);
+
+      setSpeeds(counts.map(c => c.correctedSpeed))
 
       const maxSpeed = Math.max(...counts.map(c => c.correctedSpeed))
 
@@ -79,7 +99,7 @@ export default ({location = null}) => {
             }
             totals[i] = totals[i] + cars;
 
-            return <td key={i}>{cars}</td>
+            return <td key={i}>{formatNumber(cars)}</td>
           })
         }
       </tr>
@@ -101,9 +121,24 @@ export default ({location = null}) => {
       </Title>
 
       {chart && (
-      <DailyTotal>
-        Daily total: {totals.reduce((final, current) => final + current, 0)}
-      </DailyTotal>
+      <Stats>
+
+        <Stat>
+          <b>Total vehicles</b>
+          <span>{formatNumber(counts.length)}</span>
+        </Stat>
+
+        <Stat>
+          <b>50th Percentile Speed</b>
+          <span>{Math.floor(percentile(50, speeds))} mph</span>
+        </Stat>
+
+        <Stat>
+          <b>85th Percentile Speed</b>
+          <span>{Math.floor(percentile(85, speeds))} mph</span>
+        </Stat>
+
+      </Stats>
       )}
 
       {chart && (
@@ -122,7 +157,7 @@ export default ({location = null}) => {
             <tr>
               <td>Totals:</td>
               {
-                totals.map((val, i) => <td key={i}>{val}</td>)
+                totals.map((val, i) => <td key={i}>{formatNumber(val)}</td>)
               }
             </tr>
 
