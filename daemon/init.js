@@ -24,8 +24,8 @@ const inboundQueue = new InboundMeasurementQueue({
 });
 
 const outboundQueue = new OutboundMeasurementQueue({
-  updateLive: updateLiveSpeedReport,
-  saveCount: saveSpeedReport,
+  updateLive: () => {},
+  saveCount: () => {},
 });
 
 function cleanup(port) {
@@ -47,7 +47,6 @@ getSerialPort.then(({port, parser}) => {
 
     try {
       data = JSON.parse(buffer.toString());
-      logOutput(data);
       logger.debug(JSON.stringify(data));
     } catch (err) {
       return;
