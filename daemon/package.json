@@ -20,7 +20,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "jest",
-    "start": "./node_modules/.bin/forever start init.js",
+    "start": "./node_modules/.bin/forever start -a -l /var/log/traffic-counts.log -o /var/log/traffic-counts.log -e /var/log/traffic-counts.log init.js",
     "stop": "./node_modules/.bin/forever stopall"
   },
   "author": "",
