@@ -1,6 +1,25 @@
 import React from "react"
 import PropTypes from 'prop-types';
 import getDB from '../utils/getDB';
+import styled from 'styled-components';
+
+const Form = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Label = styled.label`
+  margin-right: 5px;
+  display: inline-block;
+`
+
+const Select = styled.select`
+
+
+`
+
+
 
 const database = getDB();
 
@@ -16,9 +35,23 @@ export default class LocationChooser extends React.Component {
   }
 
   componentDidMount = () => {
-    database.ref('speedreports').orderByKey().once('value').then((snapshot) => {
+
+    const locations = window.localStorage.getItem('LOCATIONS');
+
+    if (locations) {
       this.setState({
-        reports: Object.keys(snapshot.toJSON()).reverse(),
+        reports: JSON.parse(locations),
+      });
+    }
+
+    database.ref('speedreports').orderByKey().once('value').then((snapshot) => {
+
+      const reports = Object.keys(snapshot.toJSON()).reverse();
+
+      window.localStorage.setItem('LOCATIONS', JSON.stringify(reports));
+
+      this.setState({
+        reports,
       })
     });
   }
@@ -30,15 +63,15 @@ export default class LocationChooser extends React.Component {
   render() {
 
     return (
-      <form>
-        <label>Select a count location:</label>
-        <select onChange={this.handleOnChange}>
+      <Form>
+        <Label>Select a count location:</Label>
+        <Select onChange={this.handleOnChange}>
           <option value="">Please Select</option>
           {this.state.reports.map(name => (
             <option key={name} value={name}>{name}</option>
           ))}
-        </select>
-      </form>
+        </Select>
+      </Form>
     );
   }
 }

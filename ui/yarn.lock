@@ -6634,6 +6634,11 @@ human-signals@^1.1.1:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
 
+humanize@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.npmjs.org/humanize/-/humanize-0.0.9.tgz#1994ffaecdfe9c441ed2bdac7452b7bb4c9e41a4"
+  integrity sha1-GZT/rs3+nEQe0r2sdFK3u0yeQaQ=
+
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.24, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -9369,6 +9374,11 @@ pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
   integrity sha1-elfrVQpng/kRUzH89GY9XI4AelA=
+
+percentile@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.npmjs.org/percentile/-/percentile-1.2.3.tgz#0d4350449589ff9d2f0cd51f9520cfca23476779"
+  integrity sha512-vlp+oYo6vCv1GyutenKiU63i9UihrDzrj4PLIGThL9iC2Dy7nhxLeXJQX3HwGKHPP3IBrSZWHfDjZYmUOl6KVA==
 
 performance-now@^2.1.0:
   version "2.1.0"

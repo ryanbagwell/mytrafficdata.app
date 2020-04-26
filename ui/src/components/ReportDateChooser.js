@@ -6,13 +6,18 @@ const database = getDB();
 
 
 export default ({location = null, handleChange = () => {}}) => {
-  const [dates, setDates] = useState([]);
+
+  const cachedDates = window.localStorage.getItem('CACHED_DATES') || '[]';
+
+  const [dates, setDates] = useState(JSON.parse(cachedDates));
 
   useEffect(() => {
     if (!location) return;
 
     database.ref(`speedreports/${location}/counts`).orderByKey().once('value').then((snapshot) => {
-      setDates(Object.keys(snapshot.toJSON()).reverse())
+      const dates = Object.keys(snapshot.toJSON()).reverse();
+      window.localStorage.setItem('CACHED_DATES', JSON.stringify(dates));
+      setDates(dates)
     });
 
   }, [location]);
