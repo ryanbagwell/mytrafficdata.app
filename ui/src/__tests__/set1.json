@@ -1,0 +1,162 @@
+[
+  {
+    "correctedSpeed": 33.2349184844294,
+    "endTime": 1592475357.008,
+    "length": 698.0219113682597,
+    "magnitude": 41.63,
+    "measuredSpeed": 9.16,
+    "startTime": 1592475342.688
+  },
+  {
+    "correctedSpeed": 21.777706490813035,
+    "endTime": 1592482464.864,
+    "length": 2.3955492370376525,
+    "magnitude": 52.04,
+    "measuredSpeed": 9.84,
+    "startTime": 1592482464.789
+  },
+  {
+    "correctedSpeed": 31.704288984299904,
+    "endTime": 1592483132.164,
+    "length": 396.1302980073158,
+    "magnitude": 23.6,
+    "measuredSpeed": 6.45,
+    "startTime": 1592483123.645
+  },
+  {
+    "correctedSpeed": 37.06149223475313,
+    "endTime": 1592485318.874,
+    "length": 81.86142632902713,
+    "magnitude": 28.76,
+    "measuredSpeed": 7.81,
+    "startTime": 1592485317.368
+  },
+  {
+    "correctedSpeed": 30.938974234235154,
+    "endTime": 1592485865.76,
+    "length": 883.9924945937295,
+    "magnitude": 29.29,
+    "measuredSpeed": 7.81,
+    "startTime": 1592485846.279
+  },
+  {
+    "correctedSpeed": 29.419599362783085,
+    "endTime": 1592491467.829,
+    "length": 380.3130401914865,
+    "magnitude": 36.45,
+    "measuredSpeed": 11.88,
+    "startTime": 1592491459.015
+  },
+  {
+    "correctedSpeed": 27.123655112588843,
+    "endTime": 1592497905.523,
+    "length": 1099.3579062073245,
+    "magnitude": 52.18,
+    "measuredSpeed": 11.2,
+    "startTime": 1592497877.888
+  },
+  {
+    "correctedSpeed": 29.419599362783085,
+    "endTime": 1592498113.276,
+    "length": 86.55638574914963,
+    "magnitude": 39.44,
+    "measuredSpeed": 7.81,
+    "startTime": 1592498111.27
+  },
+  {
+    "correctedSpeed": 29.419599362783085,
+    "endTime": 1592502330.306,
+    "length": 253.28313250933843,
+    "magnitude": 27.6,
+    "measuredSpeed": 6.45,
+    "startTime": 1592502324.436
+  },
+  {
+    "correctedSpeed": 29.419599362783085,
+    "endTime": 1592503090.662,
+    "length": 1318.8845613884162,
+    "magnitude": 30.9,
+    "measuredSpeed": 11.2,
+    "startTime": 1592503060.096
+  },
+  {
+    "correctedSpeed": 34.76554798455889,
+    "endTime": 1592509203.754,
+    "length": 500.1557157094935,
+    "magnitude": 21.87,
+    "measuredSpeed": 6.45,
+    "startTime": 1592509193.945
+  },
+  {
+    "correctedSpeed": 40.111496606334704,
+    "endTime": 1592509443.685,
+    "length": 370.9832094760393,
+    "magnitude": 26.47,
+    "measuredSpeed": 9.84,
+    "startTime": 1592509437.379
+  },
+  {
+    "correctedSpeed": 35.53086273462364,
+    "endTime": 1592509679.92,
+    "length": 59.720281737818325,
+    "magnitude": 31.42,
+    "measuredSpeed": 7.81,
+    "startTime": 1592509678.774
+  },
+  {
+    "correctedSpeed": 26.358340362524096,
+    "endTime": 1592511342.991,
+    "length": 77.51108809988928,
+    "magnitude": 37.63,
+    "measuredSpeed": 5.77,
+    "startTime": 1592511340.986
+  },
+  {
+    "correctedSpeed": 25.593025612459343,
+    "endTime": 1592512839.545,
+    "length": 91.66398618959514,
+    "magnitude": 21.89,
+    "measuredSpeed": 6.45,
+    "startTime": 1592512837.103
+  },
+  {
+    "correctedSpeed": 18.716447490554042,
+    "endTime": 1592512906.257,
+    "length": 2.0588105329165978,
+    "magnitude": 45.22,
+    "measuredSpeed": 6.45,
+    "startTime": 1592512906.182
+  },
+  {
+    "correctedSpeed": 26.358340362524096,
+    "endTime": 1592515229.04,
+    "length": 36.10741244116433,
+    "magnitude": 50.38,
+    "measuredSpeed": 10.52,
+    "startTime": 1592515228.106
+  },
+  {
+    "correctedSpeed": 21.012391740748285,
+    "endTime": 1592519117.49,
+    "length": 2.280548620132409,
+    "magnitude": 71.79,
+    "measuredSpeed": 6.45,
+    "startTime": 1592519117.416
+  },
+  {
+    "correctedSpeed": 30.18491411284783,
+    "endTime": 1592523484.782,
+    "length": 158.579465543223,
+    "magnitude": 38.91,
+    "measuredSpeed": 12.56,
+    "startTime": 1592523481.2
+  },
+  {
+    "correctedSpeed": 34.00023323449415,
+    "endTime": 1592532906.983,
+    "length": 1356.7815711464052,
+    "magnitude": 22.85,
+    "measuredSpeed": 7.13,
+    "startTime": 1592532879.775
+  }
+]
