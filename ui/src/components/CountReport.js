@@ -27,6 +27,7 @@ const Stat = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  margin: 15px;
 `
 
 const Stats = styled.div`
@@ -34,6 +35,7 @@ const Stats = styled.div`
   justify-content: space-around;
   align-items: flex-start;
   margin-bottom: 30px;
+  flex-wrap: wrap;
 `
 
 const formatNumber = num => numberFormat(num, 0)

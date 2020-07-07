@@ -9,15 +9,17 @@ import React from "react"
 import PropTypes from "prop-types"
 import Header from "./header"
 import "./layout.css"
-import styled from 'styled-components';
+import styled from "styled-components"
 
 const Main = styled.main`
   padding: 25px;
 `
 
-
-
-
+const GHBadge = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+`
 
 const Layout = ({ children }) => {
   return (
@@ -26,6 +28,17 @@ const Layout = ({ children }) => {
       <div>
         <Main>{children}</Main>
       </div>
+      <GHBadge>
+        <a href="https://github.com/ryanbagwell/lidar-speed-camera">
+          <img
+            width="149"
+            height="149"
+            src="https://github.blog/wp-content/uploads/2008/12/forkme_left_white_ffffff.png?resize=149%2C149"
+            alt="Fork me on GitHub"
+            data-recalc-dims="1"
+          />
+        </a>
+      </GHBadge>
     </>
   )
 }
