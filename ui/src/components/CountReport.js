@@ -13,7 +13,10 @@ const database = getDB()
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 50px 20px;
+  padding: 50px 0;
+  max-width: 100%;
+  width: 100%;
+  overflow: auto;
 `
 
 const Title = styled.div`
@@ -36,6 +39,40 @@ const Stats = styled.div`
   align-items: flex-start;
   margin-bottom: 30px;
   flex-wrap: wrap;
+`
+const Table = styled.table`
+  font-size: 15px;
+`
+
+const TH = styled.th`
+  text-align: center;
+  font-size: 15px;
+  padding-left: 0.1vw;
+  padding-right: 0.1vw;
+  min-width: 50px;
+
+  &:first-child {
+    text-align: left;
+    padding-left: 0;
+    min-width: 90px;
+  }
+`
+
+const TD = styled.td`
+  text-align: center;
+  padding-left: 0.1vw;
+  padding-right: 0.1vw;
+  min-width: 50px;
+
+  &:first-child {
+    text-align: left;
+    padding-left: 0;
+    min-width: 90px;
+  }
+
+  &:nth-child(even) {
+    background: #eeeeee;
+  }
 `
 
 const formatNumber = num => numberFormat(num, 0)
@@ -73,16 +110,16 @@ export default ({ location = null }) => {
     Object.keys(chart).map((hour, i) => {
       return (
         <tr key={i}>
-          <td>
-            <strong>{hour}</strong>
-          </td>
+          <TD>
+            <strong>{moment(hour, "HH").format("h a")}</strong>
+          </TD>
           {chart[hour].map((cars, i) => {
             if (!totals[i]) {
               totals[i] = 0
             }
             totals[i] = totals[i] + cars
 
-            return <td key={i}>{formatNumber(cars)}</td>
+            return <TD key={i}>{formatNumber(cars)}</TD>
           })}
         </tr>
       )
@@ -134,15 +171,15 @@ export default ({ location = null }) => {
       )}
 
       {chart && (
-        <table>
+        <Table>
           <thead>
             <tr>
-              <th>Hour</th>
+              <TH>Speed (mph)</TH>
               {Object.values(chart)[0].map((val, i) => {
                 return (
-                  <th key={i}>
-                    {i * 5} - {(i + 1) * 5 - 1} mph
-                  </th>
+                  <TH key={i}>
+                    {i * 5} - {(i + 1) * 5 - 1}
+                  </TH>
                 )
               })}
             </tr>
@@ -150,15 +187,15 @@ export default ({ location = null }) => {
 
           <tbody>
             <tr>
-              <td>Totals:</td>
+              <TD>Totals:</TD>
               {totals.map((val, i) => (
-                <td key={i}>{formatNumber(val)}</td>
+                <TD key={i}>{formatNumber(val)}</TD>
               ))}
             </tr>
 
             {rows}
           </tbody>
-        </table>
+        </Table>
       )}
     </Container>
   )

@@ -8,8 +8,8 @@
 import React from "react"
 import PropTypes from "prop-types"
 import Header from "./header"
-import "./layout.css"
 import styled from "styled-components"
+import GlobalStyle from "../style/global"
 
 const Main = styled.main`
   padding: 25px;
@@ -24,6 +24,7 @@ const GHBadge = styled.div`
 const Layout = ({ children }) => {
   return (
     <>
+      <GlobalStyle />
       <Header siteTitle="Speed Reports" />
       <div>
         <Main>{children}</Main>
