@@ -1,7 +1,5 @@
-process.env.GATSBY_FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
-process.env.GATSBY_FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
-
-
+process.env.GATSBY_FIREBASE_API_KEY = process.env.FIREBASE_API_KEY
+process.env.GATSBY_FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL
 
 module.exports = {
   siteMetadata: {
@@ -20,16 +18,15 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    `gatsby-plugin-typescript`,
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: `gatsby-plugin-firebase`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        credentials: {
+          apiKey: process.env.GATSBY_FIREBASE_API_KEY,
+          databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
+          authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
+        },
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
