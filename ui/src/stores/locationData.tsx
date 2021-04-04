@@ -4,21 +4,15 @@ import { makeAutoObservable } from "mobx"
 import { useLocalStore } from "mobx-react"
 
 class LocationDataStore {
-  queryDate: number = Date.now() / 1000
+  queryDate: string = null
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  setQueryDate = (dateTime: string | number) => {
-    if (typeof dateTime === "string") {
-      const d = new Date(dateTime)
-      this.queryDate = d.getTime() / 1000
-    } else {
-      this.queryDate = dateTime
-    }
+  setQueryDate = (dateTime: string) => {
+    this.queryDate = dateTime
   }
-
 }
 
 const initializedStore = new LocationDataStore()

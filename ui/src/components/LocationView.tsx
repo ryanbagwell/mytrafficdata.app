@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 const getDateStringFromTimestamp = (seconds) => {
   const d = new Date(seconds * 1000)
-  return `${d.getUTCFullYear()}-${`0${d.getUTCMonth() + 1}`.slice(
+  return `${d.getFullYear()}-${`0${d.getMonth() + 1}`.slice(
     -2
-  )}-${`0${d.getUTCDate()}`.slice(-2)}`
+  )}-${`0${d.getDate()}`.slice(-2)}`
 }
 
 export default observer((props: LocationDataProps) => {
@@ -34,16 +34,12 @@ export default observer((props: LocationDataProps) => {
   const [counts, setCounts] = useState(null)
   const { locationSlug } = props
 
-  const queryDateString = getDateStringFromTimestamp(queryDate)
-
   useEffect(() => {
     if (!queryDate) return
 
-    const queryDateString = getDateStringFromTimestamp(queryDate)
-
     const ref = firebase
       .database()
-      .ref(`speedreports/${locationSlug}/counts/${queryDateString}`)
+      .ref(`speedreports/${locationSlug}/counts/${queryDate}`)
 
     ref
       .once("value")
@@ -73,7 +69,7 @@ export default observer((props: LocationDataProps) => {
               id="datetime-local"
               label="Choose a date"
               type="date"
-              defaultValue={queryDateString}
+              defaultValue={queryDate}
               InputLabelProps={{
                 shrink: true,
               }}
