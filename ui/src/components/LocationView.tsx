@@ -14,18 +14,18 @@ interface LocationDataProps {
   locationSlug: string
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: 20,
     marginBottom: 20,
   },
 }))
 
-const getDateStringFromTimestamp = seconds => {
+const getDateStringFromTimestamp = (seconds) => {
   const d = new Date(seconds * 1000)
-  return `${d.getFullYear()}-${`0${d.getMonth() + 1}`.slice(
+  return `${d.getUTCFullYear()}-${`0${d.getUTCMonth() + 1}`.slice(
     -2
-  )}-${`0${d.getDate()}`.slice(-2)}`
+  )}-${`0${d.getUTCDate()}`.slice(-2)}`
 }
 
 export default observer((props: LocationDataProps) => {
@@ -47,12 +47,12 @@ export default observer((props: LocationDataProps) => {
 
     ref
       .once("value")
-      .then(snapshot => {
+      .then((snapshot) => {
         const data = snapshot.toJSON()
         const counts = Object.values(data)
         setCounts(counts)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
       })
   }, [queryDate, locationSlug])
@@ -80,7 +80,7 @@ export default observer((props: LocationDataProps) => {
               inputProps={{
                 max: getDateStringFromTimestamp(Date.now() / 1000),
               }}
-              onChange={e => setQueryDate(e.target.value)}
+              onChange={(e) => setQueryDate(e.target.value)}
             />
           </form>
 
