@@ -26,6 +26,7 @@ module.exports = {
           apiKey: process.env.GATSBY_FIREBASE_API_KEY,
           databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
           authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
         },
       },
     },

@@ -12,9 +12,11 @@ import { useStore } from "../stores/global"
 
 import LaunchIcon from "@material-ui/icons/Launch"
 import PersonIcon from "@material-ui/icons/Person"
+import AddIcon from "@material-ui/icons/Add"
 import ExitIcon from "@material-ui/icons/ExitToApp"
 import useAuthenticaton from "../hooks/useAuthenticaton"
 import { Link } from "gatsby"
+import useUserLocations from "../hooks/useUserLocations"
 
 const useStyles = makeStyles({
   list: {
@@ -81,11 +83,11 @@ const MenuItem = React.memo(
 )
 
 export default observer(() => {
-  const { isSidebarMenuOpen, setIsSidebarMenuOpen } = useStore()
+  const { isSidebarMenuOpen, setIsSidebarMenuOpen, userProfile } = useStore()
+  const userLocations = useUserLocations(userProfile.uid)
   const classes = useStyles()
-  const currentUser = useAuthenticaton()
 
-  const list = anchor => (
+  const list = (anchor) => (
     <div
       className={clsx(classes.list, {
         [classes.fullList]: anchor === "top" || anchor === "bottom",
@@ -99,14 +101,28 @@ export default observer(() => {
         <MenuItem text="Count Locations" bold />
         <MenuItem
           text="Upham Street, Melrose, MA"
-          link="/locations/444-Upham-Street/"
+          link="/locations/legacy/444-Upham-Street/"
         />
       </List>
+      {userProfile.uid && (
+        <List>
+          <Divider />
+          <MenuItem text="My Count Locations" bold />
+          {userLocations.map((loc) => (
+            <MenuItem text={loc.name} link={`/locations/${loc.id}`} />
+          ))}
+          <MenuItem
+            text="Add location"
+            icon={<AddIcon />}
+            link="/locations/create"
+          />
+        </List>
+      )}
       <List>
         <Divider />
-        {currentUser && (
+        {userProfile.uid && (
           <>
-            <MenuItem text={`Welcome ${currentUser.displayName}`} />
+            <MenuItem text={`Welcome ${userProfile.displayName}`} />
             <MenuItem
               text="My Account"
               link="/account/"
@@ -115,7 +131,7 @@ export default observer(() => {
             <MenuItem text="Sign Out" link="/logout/" icon={<ExitIcon />} />
           </>
         )}
-        {!currentUser && (
+        {!userProfile.uid && (
           <ListItem button key="Sign In">
             <ListItemIcon>
               +

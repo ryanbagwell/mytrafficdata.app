@@ -1,12 +1,16 @@
 import React from "react"
-import Page from "../components/Page"
 import { Router } from "@reach/router"
 import LocationView from "../components/LocationView"
+import LegacyLocationView from "../components/LegacyLocationView"
+import CreateLocationView from "../components/CreateLocationView"
 
 export default () => {
   return (
     <Router basepath="/locations">
-      <LocationView path=":locationSlug" />
+      <CreateLocationView path="/create" />
+      <LegacyLocationView path="/legacy/:locationSlug" />
+      <LocationView path="/:locationId/daily-report" />
+      <LocationView path="/:locationId" />
     </Router>
   )
 }
