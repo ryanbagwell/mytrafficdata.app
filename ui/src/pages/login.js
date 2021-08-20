@@ -19,7 +19,7 @@ const startAuth = async () => {
     // Terms of service url/callback.
     tosUrl: "<your-tos-url>",
     // Privacy policy url/callback.
-    privacyPolicyUrl: function() {
+    privacyPolicyUrl: function () {
       window.location.assign("<your-privacy-policy-url>")
     },
   }
@@ -28,7 +28,9 @@ const startAuth = async () => {
   ui.start("#firebaseui-auth-container", uiConfig)
 }
 
-export default () => {
+const Login = () => {
   useEffect(startAuth, [])
   return <div id="firebaseui-auth-container"></div>
 }
+
+export default Login

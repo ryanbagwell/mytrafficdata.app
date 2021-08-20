@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 })
 
-const formatNumber = num => numberFormat(num, 0)
+const formatNumber = (num) => numberFormat(num, 0)
 
 interface Count {
   correctedSpeed: number
@@ -40,6 +40,7 @@ interface Count {
 
 interface CountStatsProps {
   counts: Count[]
+  speedLimit: number
 }
 
 const StatCard = ({ title, stat }) => {
@@ -62,11 +63,20 @@ const StatCard = ({ title, stat }) => {
   )
 }
 
-export default ({ counts }: CountStatsProps) => {
+export default ({ counts, speedLimit }: CountStatsProps) => {
   const classes = useStyles()
   if (!counts) return null
 
-  const speeds = counts.map(c => c.correctedSpeed)
+  const speeds = counts.map((c) => {
+    if (typeof c === "object") {
+      return c.correctedSpeed
+    } else {
+      return c
+    }
+  })
+
+  const overFive = speedLimit ? speeds.filter((s) => s > speedLimit + 5) : null
+  const overTen = speedLimit ? speeds.filter((s) => s > speedLimit + 10) : null
 
   return (
     <Paper className={classes.paper}>
@@ -79,14 +89,18 @@ export default ({ counts }: CountStatsProps) => {
       </Typography>
 
       <StatCard title="Total Vehicles" stat={formatNumber(counts.length)} />
-      <StatCard
-        title="Total > 30 mph"
-        stat={formatNumber(counts.filter(c => c.correctedSpeed > 30).length)}
-      />
-      <StatCard
-        title="Total > 35 mph"
-        stat={formatNumber(counts.filter(c => c.correctedSpeed > 35).length)}
-      />
+      {speedLimit && (
+        <StatCard
+          title={`Total > ${speedLimit + 5} mph`}
+          stat={formatNumber(overFive.length)}
+        />
+      )}
+      {speedLimit && (
+        <StatCard
+          title={`Total > ${speedLimit + 10}`}
+          stat={formatNumber(overTen.length)}
+        />
+      )}
       <StatCard
         title="50th Percentile Speed"
         stat={`${Math.floor(percentile(50, speeds))} mph`}
