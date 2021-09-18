@@ -3,7 +3,7 @@ import { wrapInCache } from "../utils/lsCache"
 
 export default wrapInCache(
   async (locationId: string, date: string) => {
-    const fs = getFirestore()
+    const fs = await getFirestore()
 
     const dateString = new Date(date).toISOString()
 
@@ -13,8 +13,10 @@ export default wrapInCache(
       .where("dateString", "==", dateString)
       .get()
       .then((snapshot) => {
-        const d = snapshot.docs[0].data()
-        return d
+        try {
+          const d = snapshot.docs[0].data()
+          return d
+        } catch(err) {}
       })
   },
   "location",

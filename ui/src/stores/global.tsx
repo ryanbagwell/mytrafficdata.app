@@ -2,14 +2,13 @@
 import React from "react"
 import { makeAutoObservable } from "mobx"
 import { useLocalStore } from "mobx-react"
-import firebase from "gatsby-plugin-firebase"
-import "firebase/auth"
-import "firebase/firestore"
+import getFirebase from "../utils/getFirebase"
+
 
 class GlobalStore {
   isSidebarMenuOpen = false
   currentUser = null
-  auth = firebase.auth()
+  auth = null
 
   userProfile = {
     firstName: "",
@@ -27,14 +26,24 @@ class GlobalStore {
 
   constructor() {
     makeAutoObservable(this)
+    this.setAuthStateChanged()
+  }
+
+  setAuthStateChanged = async() => {
+    const firebase = await getFirebase();
+    if (!firebase) return;
+    this.auth = firebase.auth()
     this.auth.onAuthStateChanged(async (user) => {
       await this.setCurrentUser(user)
       await this.fetchUserProfileData()
     })
+
   }
 
   fetchUserProfileData = async () => {
     if (!this.currentUser) return
+    const firebase = await getFirebase();
+    if (!firebase) return;
     const fs = firebase.firestore()
 
     const extra = await fs.collection("users").doc(this.currentUser.uid).get()
@@ -63,6 +72,8 @@ class GlobalStore {
   }
 
   updateExtraUserProfileData = async (data) => {
+    const firebase = await getFirebase();
+    if (!firebase) return;
     const fs = firebase.firestore()
 
     const doc = fs.collection("users").doc(this.userProfile.uid)

@@ -7,7 +7,7 @@ import { useStore, LocationDataStoreProvider } from "../stores/locationData"
 import CountReport from "./CountReport"
 import CountStats from "./CountStats"
 import Page from "./Page"
-import firebase from "gatsby-plugin-firebase"
+import useFirebase from '../hooks/useFirebase'
 
 interface LocationDataProps {
   locationTitle: string
@@ -33,11 +33,12 @@ export default observer((props: LocationDataProps) => {
   const { queryDate, setQueryDate } = useStore()
   const [counts, setCounts] = useState(null)
   const { locationSlug } = props
+  const firebase = useFirebase()
 
-  console.log(props)
+
 
   useEffect(() => {
-    if (!queryDate) return
+    if (!queryDate || !firebase) return
 
     const ref = firebase
       .database()
@@ -53,7 +54,7 @@ export default observer((props: LocationDataProps) => {
       .catch((err) => {
         console.log(err)
       })
-  }, [queryDate, locationSlug])
+  }, [queryDate, locationSlug, firebase])
 
   return (
     <LocationDataStoreProvider>

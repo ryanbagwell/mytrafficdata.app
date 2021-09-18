@@ -19,19 +19,5 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-typescript`,
-    {
-      resolve: `gatsby-plugin-firebase`,
-      options: {
-        credentials: {
-          apiKey: process.env.GATSBY_FIREBASE_API_KEY,
-          databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
-          authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
-          projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
-        },
-      },
-    },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
   ],
 }

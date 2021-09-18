@@ -6,9 +6,8 @@ import { useStore, GlobalStoreProvider } from "../stores/global"
 import Page from "./Page"
 import TextField from "@material-ui/core/TextField"
 import SaveButton from "./SaveButton"
-import firebase from "gatsby-plugin-firebase"
-import "firebase/firestore"
 import slugify from "slugify"
+import useFirebase from '../hooks/useFirebase'
 
 interface CountLocation {
   name: string
@@ -31,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default observer((props) => {
   const classes = useStyles()
   const { userProfile } = useStore()
+  const firebase = useFirebase()
 
   useEffect(() => {}, [])
 

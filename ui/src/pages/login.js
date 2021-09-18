@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
-import firebase from "gatsby-plugin-firebase"
-import "firebase/auth"
+import getFirebase from "../utils/getFirebase"
 import "firebaseui/dist/firebaseui.css"
 
 const startAuth = async () => {
+  const firebase = await getFirebase()
   const firebaseui = await import("firebaseui")
 
   const uiConfig = {

@@ -1,13 +1,16 @@
-import React, { useState } from "react"
-import firebase from "gatsby-plugin-firebase"
+import React, { useState, useEffect } from "react"
+import getFirebase from "../utils/getFirebase"
 
 export default () => {
-  if (typeof window === "undefined") return null
-  const auth = firebase.auth()
-  const [currentUser, setCurrentUser] = useState(auth.currentUser)
+  const [currentUser, setCurrentUser] = useState(null)
 
-  auth.onAuthStateChanged((user) => {
-    setCurrentUser(user)
-  })
+  useEffect(async () => {
+    const firebase = await getFirebase();
+    const auth = await firebase.auth()
+    auth.onAuthStateChanged((user) => {
+      setCurrentUser(user)
+    })
+  }, [])
+
   return currentUser
 }

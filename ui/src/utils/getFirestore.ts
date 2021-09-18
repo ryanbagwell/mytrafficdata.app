@@ -1,11 +1,11 @@
-import firebase from "./getFirebase"
+import getFirebase from "./getFirebase"
 
-export default (() => {
-  let cached = null
-
-  return () => {
-    if (cached !== null) return cached
-    cached = firebase.firestore()
-    return cached
+export default async () => {
+  const firebase = await getFirebase()
+  try {
+    return firebase.firestore();
+  } catch (err) {
+    return null
   }
-})()
+
+}

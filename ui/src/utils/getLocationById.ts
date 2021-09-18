@@ -5,7 +5,7 @@ const getCacheKey = (locationId: string, date: string) =>
   `location-${locationId}-${date}`
 
 export default async (locationId: string) => {
-  const fs = getFirestore()
+  const fs = await getFirestore()
 
   return await fs
     .collection("locations")

@@ -1,8 +1,7 @@
 import getFirestore from "../utils/getFirestore"
 
-const fs = getFirestore()
-
 export default async (userId) => {
+  const fs = await getFirestore()
   const results = await fs
     .collection("locations")
     .where("ownerId", "==", userId)

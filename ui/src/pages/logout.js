@@ -1,11 +1,14 @@
-import React from "react"
-import firebase from "gatsby-plugin-firebase"
-import "firebase/auth"
+import React, {useEffect} from "react"
+import getFirebase from "../utils/getFirebase"
 
 const Logout = () => {
-  if (typeof window === "undefined") return <span />
-  firebase.auth().signOut()
-  window.location = "/"
+  useEffect(() => {
+    async function logMeOut() {
+      const firebase = await getFirebase();
+      firebase.auth().signOut()
+    }
+    logMeOut()
+  }, [])
   return <span />
 }
 
