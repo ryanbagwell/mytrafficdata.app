@@ -29,9 +29,14 @@ const updateLiveSpeedReport = async (data) => {
 
 const saveSpeedReport = async (data) => {
   let dateStr = moment().tz('America/New_York').format('YYYY-MM-DD');
-  return await firebase.database().ref(
+  data = {
+    ...data,
+    location: LOCATION,
+  };
+  await firebase.database().ref(
     `speedreports/${LOCATION}/counts/${dateStr}`
   ).push(data);
+  await firebase.database().ref('counts').push(data)
 }
 
 module.exports = {
