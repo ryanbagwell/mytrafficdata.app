@@ -51,7 +51,9 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "deploy": "aws s3 sync ./public s3://$S3_BUCKET_NAME/",
+    "invalidate-cloudfront": "aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths \"/*\""
   },
   "engines": {
     "node": "14.16.0"
