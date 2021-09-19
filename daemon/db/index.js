@@ -13,7 +13,8 @@ if (!process.env.LOCATION_DESCRIPTION) {
   process.env.LOCATION_DESCRIPTION = moment().tz('America/New_York').format('YYYY-MM-DD-kk-mm-ss');
 }
 
-const LOCATION = slugify(process.env.LOCATION_DESCRIPTION)
+const LOCATION = slugify(process.env.LOCATION_ID)
+const LEGACY_LOCATION = slugify(process.env.LOCATION_DESCRIPTION)
 
 
 firebase.initializeApp({
@@ -32,6 +33,7 @@ const saveSpeedReport = async (data) => {
   data = {
     ...data,
     location: LOCATION,
+    legacyLocation: LEGACY_LOCATION,
   };
   await firebase.database().ref(
     `speedreports/${LOCATION}/counts/${dateStr}`
