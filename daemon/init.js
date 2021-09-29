@@ -38,6 +38,16 @@ function cleanup(port) {
 }
 
 
+if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  logger.info('No GOOGLE_APPLICATION_CREDENTIALS environment variable set. Defaulting to ../serverKey.json');
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = '../serverKey.json';
+}
+
+if (!process.env.LOCATION_DESCRIPTION) {
+  logger.info('No LOCATION_DESCRIPTION environment variable set. Using the current time as the default location')
+  process.env.LOCATION_DESCRIPTION = moment().tz('America/New_York').format('YYYY-MM-DD-kk-mm-ss');
+}
+
 
 getSerialPort.then(({port, parser}) => {
 
