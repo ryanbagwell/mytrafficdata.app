@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const logger = require('./logger');
+const moment = require('moment-timezone');
 const getSerialPort = require('./getSerialPort');
 const {
   InboundMeasurementQueue,
@@ -10,6 +11,11 @@ const {
   saveSpeedReport
 } = require('./db');
 const {getConfig, configureDevice} = require('./config');
+
+if (!process.env.LOCATION_DESCRIPTION) {
+  logger.info('No LOCATION_DESCRIPTION environment variable set. Using the current time as the default location')
+  process.env.LOCATION_DESCRIPTION = moment().tz('America/New_York').format('YYYY-MM-DD-kk-mm-ss');
+}
 
 const config = getConfig();
 
