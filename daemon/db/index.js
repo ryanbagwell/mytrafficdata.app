@@ -22,6 +22,7 @@ const saveSpeedReport = async (data) => {
     location: LOCATION,
     legacyLocation: LEGACY_LOCATION,
   };
+  logger.debug(`Saving data: ${JSON.stringify(data)}`);
   await firebase.database().ref(
     `speedreports/${LOCATION}/counts/${dateStr}`
   ).push(data).then(() => {
