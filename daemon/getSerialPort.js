@@ -5,6 +5,7 @@ const Readline = require('@serialport/parser-readline');
 module.exports = SerialPort.list().then((ports) => {
 
   let usbport = ports.find((port) => {
+    logger.debug(`Checking if ${port.manufacturer} is Infineon`)
     return /Infineon/.test(port.manufacturer);
   });
 
@@ -23,7 +24,6 @@ module.exports = SerialPort.list().then((ports) => {
 
   } else {
     logger.info("Couldn't find Infineon USB serial port");
-    process.exit();
   }
 
 });
