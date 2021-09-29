@@ -40,8 +40,8 @@ function cleanup(port) {
 
 
 if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-  logger.info('No GOOGLE_APPLICATION_CREDENTIALS environment variable set. Defaulting to ./serverKey.json');
   process.env.GOOGLE_APPLICATION_CREDENTIALS = `${__dirname}/serverKey.json`;
+  logger.info(`No GOOGLE_APPLICATION_CREDENTIALS environment variable set. Defaulting to ${process.env.GOOGLE_APPLICATION_CREDENTIALS}`);
 }
 
 if (!process.env.LOCATION_DESCRIPTION) {
