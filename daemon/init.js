@@ -9,7 +9,6 @@ const {
   updateLiveSpeedReport,
   saveSpeedReport
 } = require('./db');
-const logOutput = require('./logOutput');
 const {getConfig, configureDevice} = require('./config');
 
 const config = getConfig();
@@ -41,8 +40,8 @@ function cleanup(port) {
 
 
 if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-  logger.info('No GOOGLE_APPLICATION_CREDENTIALS environment variable set. Defaulting to ../serverKey.json');
-  process.env.GOOGLE_APPLICATION_CREDENTIALS = '../serverKey.json';
+  logger.info('No GOOGLE_APPLICATION_CREDENTIALS environment variable set. Defaulting to ./serverKey.json');
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = `${__dirname}/serverKey.json`;
 }
 
 if (!process.env.LOCATION_DESCRIPTION) {
