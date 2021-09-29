@@ -2,9 +2,13 @@
 import React from "react"
 import { makeAutoObservable } from "mobx"
 import { useLocalStore } from "mobx-react"
+import getLocationById from '../utils/getLocationById';
+
+import type {Location} from '../declarations'
 
 class LocationDataStore {
   queryDate: string = null
+  selectedLocation: Location | null = null
 
   constructor() {
     makeAutoObservable(this)
@@ -13,6 +17,18 @@ class LocationDataStore {
   setQueryDate = (dateTime: string) => {
     this.queryDate = dateTime
   }
+
+  setSelectedLocation = (location: Location) => {
+    this.selectedLocation = location
+  }
+
+  setSelectedLocationById = async (locationId: any) => {
+    const loc = await getLocationById(locationId)
+    if (loc) {
+      this.setSelectedLocation(loc)
+    }
+  }
+
 }
 
 const initializedStore = new LocationDataStore()

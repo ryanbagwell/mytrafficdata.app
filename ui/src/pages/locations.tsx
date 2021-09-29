@@ -10,6 +10,7 @@ export default () => {
       <CreateLocationView path="/create" />
       <LegacyLocationView path="/legacy/:locationSlug" />
       <LocationView path="/:locationId/daily-report" />
+      <LocationView path="/:locationId/status" />
       <LocationView path="/:locationId" />
     </Router>
   )

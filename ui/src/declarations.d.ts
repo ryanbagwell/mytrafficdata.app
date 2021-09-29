@@ -1,4 +1,4 @@
-interface FirebaseUserProfileData {
+export interface FirebaseUserProfileData {
   displayName?: string
   photoURL?: string
   uid?: string | null
@@ -6,7 +6,7 @@ interface FirebaseUserProfileData {
   phoneNumber?: string
 }
 
-interface ExtraUserProfileData {
+export interface ExtraUserProfileData {
   firstName?: string
   lastName?: string
   address?: string
@@ -17,7 +17,7 @@ interface ExtraUserProfileData {
 
 type UserProfileData = FirebaseUserProfileData & ExtraUserProfileData
 
-interface Location {
+export interface Location {
   id: string
   name: string
   address: string
@@ -26,4 +26,10 @@ interface Location {
   zip: string
   ownerId: string
   speedLimit: number
+}
+
+export interface LocationPageProps {
+  locationTitle: string
+  locationSlug: string
+  locationId: string
 }

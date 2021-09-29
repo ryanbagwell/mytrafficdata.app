@@ -13,7 +13,10 @@ export default async (locationId: string) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        return doc.data()
+        return {
+          ...doc.data(),
+          id: locationId,
+        }
       } else {
         return null
       }

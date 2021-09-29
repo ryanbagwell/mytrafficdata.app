@@ -1,3 +1,4 @@
+/* Returns counts from firebase */
 import getFirestore from "./getFirestore"
 import { wrapInCache } from "../utils/lsCache"
 
