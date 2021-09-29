@@ -29,10 +29,12 @@ const outboundQueue = new OutboundMeasurementQueue({
 });
 
 function cleanup(port) {
-  logger.info('Placing device in idle mode');
-  port.write('PI');
-  logger.info('Closing serial port');
-  port.isOpen && port.close();
+  if (port) {
+    logger.info('Placing device in idle mode');
+    port.write('PI');
+    logger.info('Closing serial port');
+    port.isOpen && port.close();
+  }
   logger.info('Shutting down ...');
   process.exit(0);
 }
@@ -81,5 +83,7 @@ getSerialPort.then(({port, parser}) => {
   process.on('SIGINT', () => cleanup(port));
   process.on('exit', () => cleanup(port));
 
-
-});
+}).catch((err) => {
+  logger.error(err);
+  cleanup()
+})
