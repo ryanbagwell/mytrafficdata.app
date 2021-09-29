@@ -1,16 +1,13 @@
-const firebase = require('firebase-admin');
 const logger = require('../logger');
 const moment = require('moment-timezone');
 const slugify = require('slugify');
+const getFirebase = require('./getFirebase');
+
+const firebase = getFirebase();
 
 const LOCATION = slugify(process.env.LOCATION_ID)
 const LEGACY_LOCATION = slugify(process.env.LOCATION_DESCRIPTION)
 
-
-firebase.initializeApp({
-  credential: firebase.credential.applicationDefault(),
-  databaseURL: process.env.databaseURL,
-});
 
 const updateLiveSpeedReport = async (data) => {
   return await firebase.database().ref(
