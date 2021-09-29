@@ -37,8 +37,12 @@ const saveSpeedReport = async (data) => {
   };
   await firebase.database().ref(
     `speedreports/${LOCATION}/counts/${dateStr}`
-  ).push(data);
-  await firebase.database().ref('counts').push(data)
+  ).push(data).then(() => {
+    logger.info(`Pushed count to speedreports/${LOCATION}/counts/${dateStr}`)
+  });
+  await firebase.database().ref('counts').push(data).then(() => {
+    logger.info(`Pushed count to counts`)
+  })
 }
 
 module.exports = {
