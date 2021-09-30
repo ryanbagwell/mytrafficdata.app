@@ -20,7 +20,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "jest",
-    "start": "./node_modules/.bin/forever start -a -l /var/log/traffic-counts.log -o /var/log/traffic-counts.log -e /var/log/traffic-counts.log --minUptime 3600000 --spinSleepTime 360000 init.js",
+    "start": "./node_modules/.bin/forever start --debug --verbose -a -l /var/log/traffic-counts.log -o /var/log/traffic-counts.log -e /var/log/traffic-counts.log --minUptime 3600000 --spinSleepTime 360000 init.js",
     "stop": "./node_modules/.bin/forever stopall"
   },
   "author": "",

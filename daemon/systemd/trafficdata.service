@@ -1,0 +1,12 @@
+[Unit]
+Description=Traffic counter daemon
+
+[Service]
+ExecStart=/usr/local/bin/speedcamera.start
+#ExecStop=/usr/local/bin/speedcamera.stop
+Restart=on-failure
+User=root
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
