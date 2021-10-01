@@ -1,14 +1,14 @@
 const winston = require('winston');
-const {combine, timestamp, cli, printf} = winston.format;
+const {combine, timestamp, printf} = winston.format;
 
-winston.level = process.env.LOG_LEVEL || 'debug';
+const logLevel = process.env.LOG_LEVEL || 'debug';
 
 const formatter = printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level}]: ${message}`;
 });
 
 const logger = winston.createLogger({
-  levels: winston.config.syslog.levels,
+  level: logLevel,
   format: combine(
     timestamp(),
     formatter,
