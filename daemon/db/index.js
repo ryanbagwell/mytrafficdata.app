@@ -5,8 +5,8 @@ const getFirebase = require('./getFirebase');
 
 const firebase = getFirebase();
 
-const LOCATION = slugify(process.env.LOCATION_ID)
-const LEGACY_LOCATION = slugify(process.env.LOCATION_DESCRIPTION)
+const LOCATION = slugify(process.env.LOCATION_ID || '')
+const LEGACY_LOCATION = slugify(process.env.LOCATION_DESCRIPTION || '')
 
 
 const updateLiveSpeedReport = async (data) => {
