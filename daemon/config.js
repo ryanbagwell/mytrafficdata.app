@@ -143,10 +143,15 @@ const configureDevice = (port) => {
 }
 
 const getConfig = memoize((path = './config.json') => {
-  const data = fs.readFileSync(path);
+  let conf = "{}";
+  try {
+    conf = fs.readFileSync(path);
+  } catch (err) {
+    logger.warn('Failed to open local config file. Falling back to default settings.')
+  }
   return {
     ...defaultConf,
-    ...JSON.parse(data.toString()),
+    ...JSON.parse(conf.toString()),
   };
 });
 
