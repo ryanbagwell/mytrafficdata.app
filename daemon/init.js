@@ -58,6 +58,19 @@ getSerialPort.then(({port, parser}) => {
     }
 
     if (data && data.speed) {
+      // Add the current time of the count.
+      // the startTime and endTime timestamps
+      // supplied by the device are the seconds since
+      // the device was last powered on or something
+      // like that. They're not a reliable source of
+      // actual point in time that the count was measured.
+      const timestamp = Date.now()
+      data = {
+        ...data,
+        countTimestamp: Date.now(),
+        countDateTime: new Date(timestamp).toISOString(),
+      }
+
       logger.debug(data);
       if (parseFloat(data.speed < 0)) {
         outboundQueue.push(data);
