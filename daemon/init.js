@@ -52,7 +52,7 @@ getSerialPort.then(({port, parser}) => {
 
     try {
       data = JSON.parse(buffer.toString());
-      logger.debug(JSON.stringify(data));
+      logger.rawCountData(JSON.stringify(data));
     } catch (err) {
       return;
     }
@@ -71,10 +71,11 @@ getSerialPort.then(({port, parser}) => {
         countDateTime: new Date(timestamp).toISOString(),
       }
 
-      logger.debug(data);
       if (parseFloat(data.speed < 0)) {
+        logger.silly('Sending count to outbound queue')
         outboundQueue.push(data);
       } else {
+        logger.silly('Sending count to inbound queue')
         inboundQueue.push(data);
       }
     }
