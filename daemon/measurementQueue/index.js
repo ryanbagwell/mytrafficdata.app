@@ -108,6 +108,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
 
 
     this.saveCount({
+      ...currentReport,
       startTime: startTime,
       endTime: endTime,
       measuredSpeed,
@@ -146,7 +147,7 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
       this.save(previousReport, currentReport);
       this.updateLiveSpeed(currentReport);
     }
-  
+
   }
 
 }
