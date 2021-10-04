@@ -44,10 +44,20 @@ class BaseMeasurementQueue {
     speed = parseFloat(speed);
     time = parseFloat(time);
 
+    // Add the current time of the count.
+    // the startTime and endTime timestamps
+    // supplied by the device are the seconds since
+    // the device was last powered on or something
+    // like that. They're not a reliable source of
+    // actual point in time that the count was measured.
+    const timestamp = Date.now()
+
     this.queue.push({
       magnitude,
       speed,
       time: process.env.JEST_WORKER_ID === undefined ? moment().valueOf() / 1000 : time,
+      countTimestamp: timestamp,
+      countDateTime: new Date(timestamp).toISOString(),
     });
 
     this.processQueue();
@@ -104,17 +114,20 @@ class InboundMeasurementQueue extends BaseMeasurementQueue {
       this.deviceMaxRange
     ),
       startTime = previousReport.time,
-      endTime = currentReport.time;
+      endTime = currentReport.time,
+      countDateTime = currentReport.countDateTime,
+      countTimestamp = currentReport.countTimestamp;
 
 
     this.saveCount({
-      ...currentReport,
       startTime: startTime,
       endTime: endTime,
       measuredSpeed,
       magnitude: magnitude,
       correctedSpeed,
       length: calculateVehicleLength(correctedSpeed, endTime - startTime),
+      countDateTime,
+      countTimestamp,
     });
 
     logger.debug('Saved count');
