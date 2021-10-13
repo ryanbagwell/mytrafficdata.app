@@ -23,14 +23,27 @@ const saveSpeedReport = async (data) => {
     legacyLocation: LEGACY_LOCATION,
   };
   logger.debug(`Saving data: ${JSON.stringify(data)}`);
+
   await firebase.database().ref(
     `speedreports/${LOCATION}/counts/${dateStr}`
   ).push(data).then(() => {
     logger.info(`Pushed count to speedreports/${LOCATION}/counts/${dateStr}`)
   });
+
   await firebase.database().ref('counts').push(data).then(() => {
     logger.info(`Pushed count to counts`)
   })
+
+  await firebase.firestore()
+  .collection(`rawCounts`)
+  .doc(`${LOCATION}-${data.countDateTime}`)
+  .set({
+    ...data,
+    location: firestore.doc(`locations/${LOCATION}`),
+  }).then(() => {
+    logger.info(`Pushed count to firestore`)
+  })
+
 }
 
 module.exports = {
