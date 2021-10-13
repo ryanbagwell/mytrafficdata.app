@@ -8,6 +8,7 @@ const firebase = getFirebase();
 const LOCATION = slugify(process.env.LOCATION_ID || '')
 const LEGACY_LOCATION = slugify(process.env.LOCATION_DESCRIPTION || '')
 
+const firestore = firebase.firestore();
 
 const updateLiveSpeedReport = async (data) => {
   return await firebase.database().ref(
@@ -34,7 +35,7 @@ const saveSpeedReport = async (data) => {
     logger.info(`Pushed count to counts`)
   })
 
-  await firebase.firestore()
+  await firestore
   .collection(`rawCounts`)
   .doc(`${LOCATION}-${data.countDateTime}`)
   .set({
