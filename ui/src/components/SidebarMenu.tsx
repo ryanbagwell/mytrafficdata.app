@@ -17,6 +17,7 @@ import ExitIcon from "@material-ui/icons/ExitToApp"
 import useAuthenticaton from "../hooks/useAuthenticaton"
 import { Link } from "gatsby"
 import useUserLocations from "../hooks/useUserLocations"
+import usePublicLocations from "../hooks/usePublicLocations"
 
 const useStyles = makeStyles({
   list: {
@@ -85,6 +86,7 @@ const MenuItem = React.memo(
 export default observer(() => {
   const { isSidebarMenuOpen, setIsSidebarMenuOpen, userProfile } = useStore()
   const userLocations = useUserLocations(userProfile.uid)
+  const publicLocations = usePublicLocations();
   const classes = useStyles()
 
   const list = (anchor) => (
@@ -99,10 +101,14 @@ export default observer(() => {
         <MenuItem text="About" link="/about/" />
         <Divider />
         <MenuItem text="Count Locations" bold />
-        <MenuItem
-          text="Upham Street, Melrose, MA"
-          link="/locations/legacy/444-Upham-Street/"
-        />
+        {publicLocations.map((loc) => {
+          console.log(loc)
+          return (<MenuItem
+            text="Upham Street, Melrose, MA"
+            link={`/locations/${loc.id}`}
+          />)
+        })}
+
       </List>
       {userProfile.uid && (
         <List>

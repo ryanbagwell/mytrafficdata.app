@@ -5,6 +5,7 @@ export default async () => {
   try {
     return firebase.firestore();
   } catch (err) {
+    console.error(err)
     return null
   }
 

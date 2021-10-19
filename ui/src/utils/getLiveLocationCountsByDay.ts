@@ -1,32 +1,35 @@
 /* Returns counts from firebase real time database */
-import getFirebase from "./getFirebase"
+import getFirestore from "./getFirestore"
 import { wrapInCache } from "./lsCache"
 
 
 export default wrapInCache(
-  async (locationId: string, date: string) => {
-    const firebase = await getFirebase()
+  async (locationId: string, date: string, done: Function) => {
+    const firestore = await getFirestore();
 
+    // Get a date object in the local timezone
     const d = new Date(date)
 
-    const startTime = d.getTime() / 1000
+    // Get unix time in milliseconds in zulu timezone
+    const startTime = d.getTime()
 
-    const endTime = (d.getTime() / 1000) + (60 * 60 * 24 * 1000)
+    // Add 23:59:59 in milliseonds to get the end time
+    const endTime = startTime + ((60 * 60 * 24 - 1)* 1000)
 
-    return await firebase.database().ref('counts')
-      .orderByChild('endTime')
-      .startAt(startTime)
-      .endBefore(endTime)
+    const location = firestore.collection('locations').doc(locationId)
+
+    const counts = await firestore.collection('rawCounts')
+      .where('location', '==', location)
+      .where('countTimestamp', '>',  startTime)
+      .where('countTimestamp', '<',  endTime)
       .get()
-      .then((snapshot) => {
-        try {
-          const d = snapshot.val()
-          const vals = Object.values(d)
-          return vals.filter(v => v.location === locationId)
-        } catch(err) {
-          console.log(err)
-        }
+      .then(({docs, empty, size}) => {
+          return docs.map((d) => d.data())
+      }).catch((err) => {
+        console.error(err)
       })
+
+    return counts
   },
   "location",
   true

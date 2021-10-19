@@ -5,18 +5,21 @@ import TextField from "@material-ui/core/TextField"
 import { observer } from "mobx-react"
 import { useStore, LocationDataStoreProvider } from "../../stores/locationData"
 import getLiveLocationCountsByDay from "../../utils/getLiveLocationCountsByDay"
-import getLocationById from "../../utils/getLocationById"
 import memoizeOne from "memoize-one"
 import CountReport from "../CountReport"
 import CountStats from "../CountStats"
+import { Box, LinearProgress } from "@material-ui/core"
 
-import type {LocationPageProps} from '../../declarations';
 
 const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: 20,
     marginBottom: 20,
+    display: 'inline-block',
   },
+  loadingContainer: {
+    height: '25px',
+  }
 }))
 
 
@@ -57,45 +60,64 @@ export default observer(() => {
   const { queryDate, setQueryDate, selectedLocation, setSelectedLocation } = useStore()
   const [location, setLocation] = useState({})
   const [counts, setCounts] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!queryDate) return
-    ;(async function getData() {
-      const dailyCounts = await getLiveLocationCountsByDay(selectedLocation.id, queryDate)
-      setCounts(dailyCounts)
+    (async function getData() {
+      if (!selectedLocation || !queryDate) return
+      setIsLoading(true);
+      try {
+        const dailyCounts = await getLiveLocationCountsByDay(selectedLocation.id, queryDate);
+        setCounts(dailyCounts)
+      } catch (err) {
+        setIsLoading(false);
+        return
+      }
+
+      setIsLoading(false);
     })()
   }, [queryDate, selectedLocation])
 
   return (
     <LocationDataStoreProvider>
-    <Container>
-      <form noValidate className={classes.form}>
-        <TextField
-          id="datetime-local"
-          label="Choose a date"
-          type="date"
-          defaultValue={queryDate}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{
-            max: getDateStringFromTimestamp(Date.now() / 1000),
-          }}
-          onChange={(e) => setQueryDate(e.target.value)}
-        />
-      </form>
+      <Box className={classes.loadingContainer}>
+        {isLoading && <LinearProgress  />}
+      </Box>
+      <Container>
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}>
+          <form noValidate className={classes.form}>
+            <TextField
+              id="datetime-local"
+              label="Choose a date"
+              type="date"
+              defaultValue={queryDate}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                max: getDateStringFromTimestamp(Date.now() / 1000),
+              }}
+              onChange={(e) => setQueryDate(e.target.value)}
+            />
+          </form>
+        </Box>
 
-      {counts.length && (
-        <React.Fragment>
-        <CountStats
-            counts={counts}
-            speedLimit={location && location.speedLimit}
-        />
-        <CountReport counts={counts} />
-        </React.Fragment>
-      )}
+        <Box>
 
-    </Container>
+          {counts.length > 0 && (
+            <React.Fragment>
+              <CountStats
+                counts={counts}
+                speedLimit={location && location.speedLimit}
+              />
+              <CountReport counts={counts} />
+            </React.Fragment>
+          )}
+        </Box>
+      </Container>
     </LocationDataStoreProvider>
   )
 })

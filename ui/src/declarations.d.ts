@@ -25,7 +25,10 @@ export interface Location {
   state: string
   zip: string
   ownerId: string
+  owner: string // a firebase reference field
+  slug: string
   speedLimit: number
+  isPublic: boolean;
 }
 
 export interface LocationPageProps {

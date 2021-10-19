@@ -1,13 +1,17 @@
 export const cacheData = (storageKey, data, ttlInMilliseconds) => {
   const now = new Date()
 
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify({
-      data: data,
-      expires: now.getTime() + ttlInMilliseconds,
-    })
-  )
+  try {
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        data: data,
+        expires: now.getTime() + ttlInMilliseconds,
+      })
+    )
+  } catch(err) {
+    console.log(err)
+  }
 }
 
 export const getCachedData = (storageKey) => {
@@ -41,6 +45,10 @@ export const wrapInCache = (
   const asyncReturn = async function (...args: any[]) {
     const key = getCacheKey(args, prefix)
 
+    if (process.env.NODE_ENV !== 'production') {
+      return await func(...args)
+    }
+
     let data = getCachedData(key)
 
     if (data) return data
@@ -54,6 +62,10 @@ export const wrapInCache = (
 
   const syncReturn = function (...args: any[]) {
     const key = getCacheKey(args, prefix)
+
+    if (process.env.NODE_ENV !== 'production') {
+      return func(...args)
+    }
 
     let data = getCachedData(key)
 

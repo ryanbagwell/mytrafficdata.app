@@ -8,7 +8,6 @@ export default () => {
   return (
     <Router basepath="/locations">
       <CreateLocationView path="/create" />
-      <LegacyLocationView path="/legacy/:locationSlug" />
       <LocationView path="/:locationId/daily-report" />
       <LocationView path="/:locationId/status" />
       <LocationView path="/:locationId" />

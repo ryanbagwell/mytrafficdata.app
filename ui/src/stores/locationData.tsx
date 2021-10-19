@@ -7,7 +7,12 @@ import getLocationById from '../utils/getLocationById';
 import type {Location} from '../declarations'
 
 class LocationDataStore {
-  queryDate: string = null
+  queryDate: string = [
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    new Date().getDate()
+  ].join('-');
+
   selectedLocation: Location | null = null
 
   constructor() {
@@ -23,10 +28,11 @@ class LocationDataStore {
   }
 
   setSelectedLocationById = async (locationId: any) => {
-    const loc = await getLocationById(locationId)
-    if (loc) {
-      this.setSelectedLocation(loc)
-    }
+    return await getLocationById(locationId).then((loc) => {
+      if (loc) {
+        this.setSelectedLocation(loc)
+      }
+    })
   }
 
 }
