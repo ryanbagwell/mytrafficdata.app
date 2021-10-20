@@ -1,7 +1,6 @@
 import React from "react"
 import moment from "moment"
 import { numberFormat } from "humanize"
-import serializeToChart from "../utils/serializeToChart"
 
 import Table from "@material-ui/core/Table"
 import TableBody from "@material-ui/core/TableBody"
@@ -31,23 +30,13 @@ const useStyles = makeStyles({
   },
 })
 
-interface Count {
-  correctedSpeed: number
-  endTime: number
-  startTime: number
-  magnitude: number
-  measuredSpeed: number
-}
-
 interface CountReportProps {
-  counts: Count[]
+  chart: [number[]];
 }
 
-export default ({ counts }: CountReportProps) => {
+export default ({ chart }: CountReportProps) => {
   const classes = useStyles()
-  if (!counts) return null
-
-  const chart = serializeToChart(counts)
+  if (!chart) return null
 
   const totals = []
 

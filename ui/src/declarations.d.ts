@@ -27,7 +27,7 @@ export interface Location {
   ownerId: string
   owner: string // a firebase reference field
   slug: string
-  speedLimit: number
+  speedLimit: string;
   isPublic: boolean;
 }
 
@@ -35,4 +35,26 @@ export interface LocationPageProps {
   locationTitle: string
   locationSlug: string
   locationId: string
+}
+
+export interface DailySummary {
+  dateString: string;
+  dateTimestamp: number;
+  location: FirebaseFirestore.DocumentReference;
+  totalVolume: number;
+  speedsByHour: Record<number, number[]>
+  volumeByHour: number[];
+  averageSpeedByHour: number[];
+  maxSpeed?: number;
+}
+
+export interface RawVehicleCount {
+  correctedSpeed: number;
+  countDateTime: string;
+  countTimestamp: number;
+  endTime: number;
+  location: string;
+  magnitude: number;
+  measuredSpeed: number;
+  startTime: number;
 }

@@ -1,6 +1,7 @@
 /* Returns counts from firebase real time database */
 import getFirestore from "./getFirestore"
 import { wrapInCache } from "./lsCache"
+import type {QuerySnapshot} from '@firebase/firestore-types';
 
 
 export default wrapInCache(
@@ -23,9 +24,9 @@ export default wrapInCache(
       .where('countTimestamp', '>',  startTime)
       .where('countTimestamp', '<',  endTime)
       .get()
-      .then(({docs, empty, size}) => {
-          return docs.map((d) => d.data())
-      }).catch((err) => {
+      .then(({docs, empty, size}: QuerySnapshot) => {
+        return docs.map((d) => d.data())
+      }).catch((err: Error) => {
         console.error(err)
       })
 

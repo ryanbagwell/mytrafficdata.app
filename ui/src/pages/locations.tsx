@@ -1,7 +1,6 @@
 import React from "react"
 import { Router } from "@reach/router"
 import LocationView from "../components/LocationView"
-import LegacyLocationView from "../components/LegacyLocationView"
 import CreateLocationView from "../components/CreateLocationView"
 
 export default () => {

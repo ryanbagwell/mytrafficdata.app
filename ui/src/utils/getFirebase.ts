@@ -1,8 +1,13 @@
-let instance = null;
+import type {FirebaseApp} from '@firebase/app-types';
+
+// type ModuleType = typeof import('firebase/dist/index.esm.js');
+
+let instance: any = null;
 
 export default async () => {
   if (instance || typeof window === 'undefined') return instance;
-  const fb = await import('firebase/dist/index.esm.js')
+  //const fb = await import('firebase/dist/index.esm.js')
+  const fb = await import('firebase')
   await import("firebase/firestore");
   await import("firebase/database");
   await import("firebase/auth");

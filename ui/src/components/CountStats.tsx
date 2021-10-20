@@ -30,17 +30,9 @@ const useStyles = makeStyles({
 
 const formatNumber = (num) => numberFormat(num, 0)
 
-interface Count {
-  correctedSpeed: number
-  endTime: number
-  startTime: number
-  magnitude: number
-  measuredSpeed: number
-}
-
 interface CountStatsProps {
-  counts: Count[]
-  speedLimit: number
+  allSpeeds: number[];
+  speedLimit: string;
 }
 
 const StatCard = ({ title, stat }) => {
@@ -63,20 +55,12 @@ const StatCard = ({ title, stat }) => {
   )
 }
 
-export default ({ counts, speedLimit }: CountStatsProps) => {
+export default ({ allSpeeds, speedLimit }: CountStatsProps) => {
   const classes = useStyles()
-  if (!counts) return null
+  if (!allSpeeds) return null
 
-  const speeds = counts.map((c) => {
-    if (typeof c === "object") {
-      return c.correctedSpeed
-    } else {
-      return c
-    }
-  })
-
-  const overFive = speedLimit ? speeds.filter((s) => s > speedLimit + 5) : null
-  const overTen = speedLimit ? speeds.filter((s) => s > speedLimit + 10) : null
+  const overFive = speedLimit ? allSpeeds.filter((s) => s > parseInt(speedLimit) + 5) : null
+  const overTen = speedLimit ? allSpeeds.filter((s) => s > parseInt(speedLimit) + 10) : null
 
   return (
     <Paper className={classes.paper}>
@@ -88,26 +72,26 @@ export default ({ counts, speedLimit }: CountStatsProps) => {
         Count Summary
       </Typography>
 
-      <StatCard title="Total Vehicles" stat={formatNumber(counts.length)} />
+      <StatCard title="Total Vehicles" stat={formatNumber(allSpeeds.length)} />
       {speedLimit && (
         <StatCard
-          title={`Total > ${speedLimit + 5} mph`}
+          title={`Total > ${parseInt(speedLimit) + 5} mph`}
           stat={formatNumber(overFive.length)}
         />
       )}
       {speedLimit && (
         <StatCard
-          title={`Total > ${speedLimit + 10}`}
+          title={`Total > ${parseInt(speedLimit) + 10}`}
           stat={formatNumber(overTen.length)}
         />
       )}
       <StatCard
         title="50th Percentile Speed"
-        stat={`${Math.floor(percentile(50, speeds))} mph`}
+        stat={`${Math.floor(percentile(50, allSpeeds))} mph`}
       />
       <StatCard
         title="85th Percentile Speed"
-        stat={`${Math.floor(percentile(85, speeds))} mph`}
+        stat={`${Math.floor(percentile(85, allSpeeds))} mph`}
       />
     </Paper>
   )

@@ -1,4 +1,4 @@
-export const cacheData = (storageKey, data, ttlInMilliseconds) => {
+export const cacheData = (storageKey: string, data: any, ttlInMilliseconds: number) => {
   const now = new Date()
 
   try {
@@ -14,7 +14,7 @@ export const cacheData = (storageKey, data, ttlInMilliseconds) => {
   }
 }
 
-export const getCachedData = (storageKey) => {
+export const getCachedData = (storageKey: string) => {
   const objectData = localStorage.getItem(storageKey)
 
   if (!objectData) {
@@ -37,7 +37,7 @@ const getCacheKey = (args: any[], prefix: any) => {
 }
 
 export const wrapInCache = (
-  func,
+  func: Function,
   prefix = "",
   async = false,
   cacheTime = 24 * 60 * 60 * 1000

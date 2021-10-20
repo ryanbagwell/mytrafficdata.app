@@ -5,10 +5,12 @@ import TextField from "@material-ui/core/TextField"
 import { observer } from "mobx-react"
 import { useStore, LocationDataStoreProvider } from "../../stores/locationData"
 import getLiveLocationCountsByDay from "../../utils/getLiveLocationCountsByDay"
-import memoizeOne from "memoize-one"
 import CountReport from "../CountReport"
 import CountStats from "../CountStats"
 import { Box, LinearProgress } from "@material-ui/core"
+import getDailySummary from "../../utils/getDailySummary"
+import serializeSummaryToChart from "../../utils/serializeSummaryToChart";
+import serializeToChart from "../../utils/serializeToChart"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,48 +32,33 @@ const getDateStringFromTimestamp = (seconds) => {
   )}-${`0${d.getDate()}`.slice(-2)}`
 }
 
-const getSpeedList = memoizeOne((counts) => {
-  return Object.keys(counts).reduce((final, hour) => {
-    const hourSpeeds = counts[hour]
-    return [...final, ...hourSpeeds]
-  }, [])
-})
-
-const getFlattenedSpeeds = memoizeOne((counts, queryDate) => {
-  return Object.keys(counts).reduce((final, hour) => {
-    const d = new Date(queryDate)
-    d.setMinutes(0)
-    d.setSeconds(0)
-    d.setMilliseconds(0)
-
-    const hourSpeeds = counts[hour].map((s) => {
-      d.setHours(parseInt(hour))
-      return {
-        correctedSpeed: s,
-        endTime: d.getTime(),
-      }
-    })
-    return [...final, ...hourSpeeds]
-  }, [])
-})
-
 export default observer(() => {
   const classes = useStyles()
   const { queryDate, setQueryDate, selectedLocation, setSelectedLocation } = useStore()
-  const [location, setLocation] = useState({})
-  const [counts, setCounts] = useState([])
+  const [allSpeeds, setAllSpeeds] = useState([])
+  const [table, setTable] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async function getData() {
       if (!selectedLocation || !queryDate) return
       setIsLoading(true);
-      try {
-        const dailyCounts = await getLiveLocationCountsByDay(selectedLocation.id, queryDate);
-        setCounts(dailyCounts)
-      } catch (err) {
-        setIsLoading(false);
-        return
+
+      const summary = await getDailySummary(queryDate, selectedLocation.id);
+
+      if (summary) {
+        const serializedChart = serializeSummaryToChart(summary);
+
+        setTable(serializedChart);
+        setAllSpeeds(Object.values(summary.speedsByHour).reduce((f, c) =>  [...f, ...c] , []))
+      } else {
+        try {
+          const dailyCounts = await getLiveLocationCountsByDay(selectedLocation.id, queryDate);
+          setTable(serializeToChart(dailyCounts))
+          setAllSpeeds(dailyCounts.map((c) => c.correctedSpeed))
+        } catch (err) {
+          setIsLoading(false);
+        }
       }
 
       setIsLoading(false);
@@ -107,13 +94,13 @@ export default observer(() => {
 
         <Box>
 
-          {counts.length > 0 && (
+          {table && (
             <React.Fragment>
               <CountStats
-                counts={counts}
-                speedLimit={location && location.speedLimit}
+                allSpeeds={allSpeeds}
+                speedLimit={selectedLocation && selectedLocation.speedLimit}
               />
-              <CountReport counts={counts} />
+              <CountReport chart={table} />
             </React.Fragment>
           )}
         </Box>

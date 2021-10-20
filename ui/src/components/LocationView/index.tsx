@@ -33,8 +33,6 @@ export default observer((props: LocationPageProps) => {
   const [selectedTabTitle, setSelectedTabTitle] = useState(null)
   const {userProfile} = useGlobalStore()
 
-  console.log(userProfile.uid, selectedLocation && selectedLocation.ownerId)
-
   useEffect(() => {
     try {
       setSelectedLocationById(props.locationId).catch((err) => {

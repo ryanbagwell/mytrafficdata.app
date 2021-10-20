@@ -5,9 +5,11 @@
  *  Each hour consists of an array of ranges like:
  *  0-4, 5-9, 10-14, 15-19, etc ...
  */
+import type {RawVehicleCount} from '../declarations';
+
 const moment = require("moment")
 
-module.exports = (counts = []) => {
+export default (counts: RawVehicleCount[] = []) => {
   //Find the max speed
   const maxSpeed = Math.max(...counts.map(c => c.correctedSpeed))
 
@@ -16,7 +18,7 @@ module.exports = (counts = []) => {
 
   //Set up our grid with 24 hours as rows and columns of speed ranges
   const grid = [...Array(24).keys()].reduce((final, current) => {
-    final[parseInt(current)] = Array(columns).fill(0)
+    final[current] = Array(columns).fill(0)
     return final
   }, {})
 
