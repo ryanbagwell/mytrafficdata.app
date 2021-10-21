@@ -1,15 +1,21 @@
 import React from "react"
-import { Router } from "@reach/router"
+import { Router, Redirect } from "@reach/router"
 import LocationView from "../components/LocationView"
 import CreateLocationView from "../components/CreateLocationView"
+
+
+const RedirectToDailyReport = (props) => {
+  console.log(props);
+  return <Redirect to={`${props.uri}/daily-report`} />
+}
+
 
 export default () => {
   return (
     <Router basepath="/locations">
       <CreateLocationView path="/create" />
-      <LocationView path="/:locationId/daily-report" />
-      <LocationView path="/:locationId/status" />
-      <LocationView path="/:locationId" />
+      <LocationView path="/:locationId/:tabName" />
+      <RedirectToDailyReport path="/:locationId" />
     </Router>
   )
 }

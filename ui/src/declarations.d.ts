@@ -32,9 +32,11 @@ export interface Location {
 }
 
 export interface LocationPageProps {
-  locationTitle: string
-  locationSlug: string
-  locationId: string
+  locationTitle: string;
+  locationSlug: string;
+  locationId: string;
+  tabName?: string;
+  navigate: Function;
 }
 
 export interface DailySummary {

@@ -11,31 +11,17 @@ import DailyReportTab from "./DailyReportTab"
 import LocationDetailsTab from "./LocationDetailsTab"
 import TrendsTab from './TrendsTab'
 import LiveSpeedTab from './LiveSpeedTab'
+import { navigate } from "@reach/router"
 
 import type {LocationPageProps} from '../../declarations';
-
-const TabPanelChooser = ({selectedTab}: {selectedTab: number}) => {
-  if (selectedTab === 0) {
-    return <DailyReportTab />
-  }
-  if (selectedTab === 1) {
-    return <LiveSpeedTab />
-  }
-  if (selectedTab === 2) {
-    return <TrendsTab />
-  }
-  if (selectedTab === 3) {
-    return <LocationDetailsTab />
-  }
-  return null
-}
 
 
 export default observer((props: LocationPageProps) => {
   const {selectedLocation, setSelectedLocationById } = useStore()
-  const [selectedTab, setSelectedTab] = useState(0)
+  const [selectedTab, setSelectedTab] = useState(props.tabName || 'daily-report')
   const [selectedTabTitle, setSelectedTabTitle] = useState(null)
   const {userProfile} = useGlobalStore()
+  const [selectedTabComponent, setSelectedTabComponent] = useState(<DailyReportTab />);
 
   useEffect(() => {
     try {
@@ -48,16 +34,21 @@ export default observer((props: LocationPageProps) => {
   }, [])
 
   useEffect(() => {
-    if (selectedTab === 0) {
+    props.navigate(`../${selectedTab}`);
+    if (selectedTab === 'daily-report') {
+      setSelectedTabComponent(<DailyReportTab />);
       setSelectedTabTitle('Daily Report');
     }
-    if (selectedTab === 1) {
+    if (selectedTab === 'live-speed') {
+      setSelectedTabComponent(<LiveSpeedTab />);
       setSelectedTabTitle('Live Speeds');
     }
-    if (selectedTab === 2) {
+    if (selectedTab === 'trends') {
+      setSelectedTabComponent(<TrendsTab />);
       setSelectedTabTitle('Trends');
     }
-    if (selectedTab === 3) {
+    if (selectedTab === 'location-details') {
+      setSelectedTabComponent(<LocationDetailsTab />);
       setSelectedTabTitle('Location Details');
     }
   }, [selectedTab])
@@ -85,16 +76,16 @@ export default observer((props: LocationPageProps) => {
               }}
               value={selectedTab}
             >
-              <Tab label="Daily Report" />
-              <Tab label="Live Speed" />
-              <Tab label="Trends" />
+              <Tab label="Daily Report" value="daily-report" />
+              <Tab label="Live Speed" value="live-speed" />
+              <Tab label="Trends" value="trends" />
               {userProfile.uid == (selectedLocation && selectedLocation.ownerId) && (
-                <Tab label="Location Details" />
+                <Tab label="Location Details" value="location-details" />
               )}
             </Tabs>
           </Paper>
 
-          <TabPanelChooser selectedTab={selectedTab} />
+          {selectedTabComponent}
 
         </Container>
       </Page>
