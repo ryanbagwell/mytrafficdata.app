@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper"
 import DailyReportTab from "./DailyReportTab"
 import LocationDetailsTab from "./LocationDetailsTab"
 import TrendsTab from './TrendsTab'
+import LiveSpeedTab from './LiveSpeedTab'
 
 import type {LocationPageProps} from '../../declarations';
 
@@ -18,9 +19,12 @@ const TabPanelChooser = ({selectedTab}: {selectedTab: number}) => {
     return <DailyReportTab />
   }
   if (selectedTab === 1) {
-    return <TrendsTab />
+    return <LiveSpeedTab />
   }
   if (selectedTab === 2) {
+    return <TrendsTab />
+  }
+  if (selectedTab === 3) {
     return <LocationDetailsTab />
   }
   return null
@@ -48,9 +52,12 @@ export default observer((props: LocationPageProps) => {
       setSelectedTabTitle('Daily Report');
     }
     if (selectedTab === 1) {
-      setSelectedTabTitle('Trends');
+      setSelectedTabTitle('Live Speeds');
     }
     if (selectedTab === 2) {
+      setSelectedTabTitle('Trends');
+    }
+    if (selectedTab === 3) {
       setSelectedTabTitle('Location Details');
     }
   }, [selectedTab])
@@ -79,6 +86,7 @@ export default observer((props: LocationPageProps) => {
               value={selectedTab}
             >
               <Tab label="Daily Report" />
+              <Tab label="Live Speed" />
               <Tab label="Trends" />
               {userProfile.uid == (selectedLocation && selectedLocation.ownerId) && (
                 <Tab label="Location Details" />

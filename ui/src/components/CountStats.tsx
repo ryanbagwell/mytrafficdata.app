@@ -15,6 +15,9 @@ const useStyles = makeStyles({
   cardStat: {
     textAlign: "center",
   },
+  card: {
+    marginBottom: 20,
+  },
   paper: {
     display: "flex",
     justifyContent: "space-evenly",
@@ -22,9 +25,6 @@ const useStyles = makeStyles({
     width: "100%",
     padding: "20px 20px 0 20px",
     flexWrap: "wrap",
-  },
-  card: {
-    marginBottom: 20,
   },
 })
 
