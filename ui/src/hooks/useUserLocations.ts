@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react"
-import useFirebase from "./useFirebase"
+import useFirestore from "./useFirestore"
 
 export default (userId) => {
   const [userLocations, setUserLocations] = useState([])
-  const firebase = useFirebase()
+  const firestore = useFirestore()
 
   useEffect(() => {
-    if (!firebase || !userId) return;
-
-    const firestore = firebase.firestore()
+    if (!firestore || !userId) return;
 
     firestore
       .collection("locations")
@@ -29,7 +27,7 @@ export default (userId) => {
         console.log(err)
       })
 
-  }, [userId, firebase])
+  }, [userId, firestore])
 
   return userLocations
 }

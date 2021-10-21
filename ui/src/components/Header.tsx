@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton"
 import MenuIcon from "@material-ui/icons/Menu"
 import { observer } from "mobx-react"
 import { useStore } from "../stores/global"
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 interface HeaderProps {
   displayTitle?: string
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export default observer(({ displayTitle }: HeaderProps) => {
   const store = useStore()
+  const isMobile = useMediaQuery('(max-width:600px)')
 
   return (
     <header>
@@ -25,7 +27,9 @@ export default observer(({ displayTitle }: HeaderProps) => {
               }
             />
           </IconButton>
-          <Typography variant="h6">{displayTitle}</Typography>
+          {!isMobile && (
+            <Typography variant="h6">{displayTitle}</Typography>
+          )}
         </Toolbar>
       </AppBar>
     </header>

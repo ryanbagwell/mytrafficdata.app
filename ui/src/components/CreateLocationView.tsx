@@ -7,7 +7,7 @@ import Page from "./Page"
 import TextField from "@material-ui/core/TextField"
 import SaveButton from "./SaveButton"
 import slugify from "slugify"
-import useFirebase from '../hooks/useFirebase'
+import useFirestore from '../hooks/useFirestore'
 
 interface CountLocation {
   name: string
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default observer((props) => {
   const classes = useStyles()
   const { userProfile } = useStore()
-  const firebase = useFirebase()
+  const firestore = useFirestore()
 
   useEffect(() => {}, [])
 
@@ -38,7 +38,6 @@ export default observer((props) => {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
 
-    const fs = firebase.firestore()
     const data: CountLocation = [...form].reduce((final, [key, value]) => {
       return {
         ...final,
@@ -48,8 +47,8 @@ export default observer((props) => {
 
     data.slug = slugify(data.name, { lower: true })
     data.ownerId = userProfile.uid
-    data.owner = fs.doc("users/" + userProfile.uid)
-    await fs.collection("locations").add(data)
+    data.owner = firestore.doc("users/" + userProfile.uid)
+    await firestore.collection("locations").add(data)
   }
 
   return (

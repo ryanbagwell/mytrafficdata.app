@@ -7,6 +7,7 @@ import useFirebase from '../../hooks/useFirebase'
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import useFirestore from "../../hooks/useFirestore";
 
 import type {Location} from '../../declarations'
 
@@ -14,11 +15,11 @@ export default observer((props) => {
     const {selectedLocation, setSelectedLocationById} = useStore()
     const firebase = useFirebase()
     const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
+    const firestore = useFirestore();
 
     const save = async (data: Location) => {
-      const fs = firebase.firestore()
 
-      await fs.collection("locations")
+      await firestore.collection("locations")
         .doc(selectedLocation.id)
         .update(data)
         .then(() => {

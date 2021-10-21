@@ -3,6 +3,7 @@ import React from "react"
 import { makeAutoObservable } from "mobx"
 import { useLocalStore } from "mobx-react"
 import getFirebase from "../utils/getFirebase"
+import getFirestore from "../utils/getFirestore"
 
 
 class GlobalStore {
@@ -44,9 +45,9 @@ class GlobalStore {
     if (!this.currentUser) return
     const firebase = await getFirebase();
     if (!firebase) return;
-    const fs = firebase.firestore()
+    const firestore = await getFirestore();
 
-    const extra = await fs.collection("users").doc(this.currentUser.uid).get()
+    const extra = await firestore.collection("users").doc(this.currentUser.uid).get()
 
     const data = extra.data()
 
@@ -72,11 +73,10 @@ class GlobalStore {
   }
 
   updateExtraUserProfileData = async (data) => {
-    const firebase = await getFirebase();
-    if (!firebase) return;
-    const fs = firebase.firestore()
+    const firestore = await getFirestore();
+    if (!firestore) return;
 
-    const doc = fs.collection("users").doc(this.userProfile.uid)
+    const doc = firestore.collection("users").doc(this.userProfile.uid)
 
     const dataToUpdate = Object.entries(data).reduce((final, [key, value]) => {
       if (key in this.currentUser) {
