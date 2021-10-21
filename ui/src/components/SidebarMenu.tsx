@@ -102,7 +102,6 @@ export default observer(() => {
         <Divider />
         <MenuItem text="Count Locations" bold />
         {publicLocations.map((loc) => {
-          console.log(loc)
           return (<MenuItem
             text="Upham Street, Melrose, MA"
             link={`/locations/${loc.id}`}

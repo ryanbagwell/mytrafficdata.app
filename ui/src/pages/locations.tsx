@@ -5,7 +5,6 @@ import CreateLocationView from "../components/CreateLocationView"
 
 
 const RedirectToDailyReport = (props) => {
-  console.log(props);
   return <Redirect to={`${props.uri}/daily-report`} />
 }
 

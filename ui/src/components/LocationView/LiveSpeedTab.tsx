@@ -53,7 +53,6 @@ export default observer((props) => {
   }, [firestore, selectedLocation])
 
   const getDisplayCount = () => {
-    console.log(counts[counts.length - 1])
     return counts[counts.length - 1];
   }
 
