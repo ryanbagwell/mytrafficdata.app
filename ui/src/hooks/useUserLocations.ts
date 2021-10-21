@@ -6,13 +6,13 @@ export default (userId) => {
   const firebase = useFirebase()
 
   useEffect(() => {
-    if (!firebase) return;
+    if (!firebase || !userId) return;
 
     const firestore = firebase.firestore()
 
     firestore
       .collection("locations")
-      .where("ownerId", "==", userId)
+      .where("owner", "==", firestore.collection('users').doc(userId))
       .get()
       .then(({docs, size, empty}) => {
         if (docs) {
