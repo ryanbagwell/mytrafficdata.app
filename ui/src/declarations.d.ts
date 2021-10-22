@@ -29,6 +29,8 @@ export interface Location {
   slug: string
   speedLimit: string;
   isPublic: boolean;
+  inboundDescription: string;
+  outboundDescription: string;
 }
 
 export interface LocationPageProps {

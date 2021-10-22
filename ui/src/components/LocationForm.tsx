@@ -149,6 +149,32 @@ export default (props: LocationFormProps) => {
           name="speedLimit"
           defaultValue={props.locationData.speedLimit}
       />
+      <TextField
+        id="outlined-full-width"
+        label="Incoming direction description (i.e. eastbound)"
+        style={{ margin: 8 }}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="outlined"
+        name="inboundDescription"
+        defaultValue={props.locationData.inboundDescription}
+      />
+      <TextField
+        id="outlined-full-width"
+        label="Outbound direction description (i.e. westbound)"
+        style={{ margin: 8 }}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="outlined"
+        name="inboundDescription"
+        defaultValue={props.locationData.outboundDescription}
+      />
       <FormControlLabel
         control={
           <Checkbox
