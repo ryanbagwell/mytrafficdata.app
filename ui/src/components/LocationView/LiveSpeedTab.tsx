@@ -4,8 +4,10 @@ import { observer } from "mobx-react"
 import useFirestore from '../../hooks/useFirestore'
 import {Paper, Typography, Container, Card, CardContent, Box} from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles"
-import Chart from "react-apexcharts";
 import formatDate from 'date-fns/format';
+import loadable from '@loadable/component'
+
+const Chart = loadable(() => import('react-apexcharts'))
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -153,11 +155,13 @@ export default observer((props) => {
             History
           </Typography>
 
-          <Chart
-            options={chartConfig}
-            series={series}
-            type="line"
-          />
+          {typeof window !== 'undefined' && (
+            <Chart
+              options={chartConfig}
+              series={series}
+              type="line"
+            />
+          )}
         </Box>
       </Container>
 
