@@ -10,12 +10,6 @@ const LEGACY_LOCATION = slugify(process.env.LOCATION_DESCRIPTION || '')
 
 const firestore = firebase.firestore();
 
-const updateLiveSpeedReport = async (data) => {
-  return await firebase.database().ref(
-    `speedreports/${LOCATION}/live`
-  ).set(data);
-}
-
 const saveSpeedReport = async (data) => {
   let dateStr = moment().tz('America/New_York').format('YYYY-MM-DD');
   data = {
@@ -24,16 +18,6 @@ const saveSpeedReport = async (data) => {
     legacyLocation: LEGACY_LOCATION,
   };
   logger.debug(`Saving data: ${JSON.stringify(data)}`);
-
-  await firebase.database().ref(
-    `speedreports/${LOCATION}/counts/${dateStr}`
-  ).push(data).then(() => {
-    logger.info(`Pushed count to speedreports/${LOCATION}/counts/${dateStr}`)
-  });
-
-  await firebase.database().ref('counts').push(data).then(() => {
-    logger.info(`Pushed count to counts`)
-  })
 
   await firestore
   .collection(`rawCounts`)
@@ -48,6 +32,6 @@ const saveSpeedReport = async (data) => {
 }
 
 module.exports = {
-  updateLiveSpeedReport,
+  updateLiveSpeedReport: () => {},
   saveSpeedReport
 }
