@@ -86,7 +86,7 @@ export default observer((props) => {
   }, [counts])
 
   const getDisplayCount = () => {
-    return counts[counts.length - 1];
+    return counts[0];
   }
 
   const chartConfig = {
