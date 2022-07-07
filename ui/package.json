@@ -33,7 +33,7 @@
     "memoize-one": "^5.1.1",
     "mobx": "^6.1.8",
     "mobx-react": "^7.1.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "percentile": "^1.4.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
